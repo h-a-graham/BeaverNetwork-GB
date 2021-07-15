@@ -37,3 +37,12 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
+
+# Targets folder
+_targets/
+
+# Data folders
+test_outs/
+int_files/
+bfi_out/
+data/
