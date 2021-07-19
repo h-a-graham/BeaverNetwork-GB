@@ -8,41 +8,32 @@
 #   return(r)
 # }
 
-rasterize_nfi <- function(lcm_path, nfi_path, res){
-  # out_path <- file.path(save_dir, 'NFI_ras.tif')
-  
-  lcm_ter <- terra::rast(lcm_path)
-  
-  # r <- ras_template(lcm_ter, res)
-  
-  nfi_ras <- st_read(nfi_path, 
-                     query= sprintf("SELECT CATEGORY FROM \"%s\" WHERE CATEGORY = 'Woodland'",
-                                    tools::file_path_sans_ext(basename(nfi_path)))) %>%
-    mutate(woodland=1) %>%
-    fasterize_terra(., lcm_ter, 'woodland')
-  
-  # terra::writeRaster(nfi_all, out_path)
-  
-  return(nfi_ras)
-}
+rasterize_nfi <- function(lcm_ter, .nfi){
 
-rasterize_vmd <- function(lcm_path, vmd_path, res){
-  
-  # out_path <- file.path(save_dir, 'vmd_Water_ras.tif')
-  
-  lcm_ter <- terra::rast(lcm_path)
-  
-  # r <- ras_template(lcm_ter, res)
-  
-  vmd_wat_ras <- st_read(vmd_path, layer='SurfaceWater_Area') %>%
-    mutate(water=1) %>%
-    fasterize_terra(., lcm_ter, 'water')
-  
-  # terra::writeRaster(vmd_wat_all, out_path)
-    
-  
-  return(vmd_wat_ras)
+    fasterize_terra(.nfi, lcm_ter, 'woodland')
   
 }
 
+rasterize_vmd <- function(lcm_ter, .vmd){
+ 
+    fasterize_terra(.vmd, lcm_ter, 'water')
+  
+}
 
+rasterize_water_buff <- function(bfi, os_grid, os_orn, vmd){
+  
+  os_orn <-os_orn %>%
+    st_intersection(., os_grid)
+  
+  vmd <- vmd %>%
+    st_intersection(., os_grid)
+  
+  bind_water <- bind_rows(os_orn, vmd) %>%
+    st_buffer(100) %>%
+    select(geom)%>%
+    st_cast('POLYGON')%>%
+    mutate(water=1)
+  
+  bw <- fasterize_terra(bind_water, bfi, 'water')
+  return(bw)
+}

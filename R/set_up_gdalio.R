@@ -22,6 +22,13 @@ gdalio_terra <- function(dsn, ...) {
 }
 
 
+gdalio_to_terra <- function(.gdalio, ...){
+  g <- gdalio_get_default_grid()
+  r <- terra::rast(terra::ext(g$extent), nrows = g$dimension[2], ncols = g$dimension[1], crs = g$projection)
+  if (length(.gdalio) > 1) terra::nlyr(r) <- length(.gdalio)
+  terra::setValues(r, matrix(unlist(.gdalio), prod(g$dimension)))
+}
+
 # gdalio_stars <- function(dsn, ...) {
 #   v <- gdalio_data(dsn, ...)
 #   g <- gdalio_get_default_grid()
