@@ -10,7 +10,7 @@ get_OS_grid <- function(){
   OS_100km_grid <- file.path(unzipped_loc, 'OSGB_Grids-master', 
                              'Shapefile', 'OSGB_Grid_100km.shp') %>%
     st_read() %>%
-    select(!X250K) %>%
+    select(TILE_NAME) %>%
     group_by(TILE_NAME) %>%
     group_split()
   

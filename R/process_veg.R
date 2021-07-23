@@ -1,10 +1,7 @@
-ras_template <- function(terr_ras, value=NA){
-  
-  .emp <- terra::rast(nrows=terra::nrow(terr_ras), ncols=terra::ncol(terr_ras),
-                   xmin=terra::ext(terr_ras)[1], xmax=terra::ext(terr_ras)[2],
-                   ymin=terra::ext(terr_ras)[3], ymax=terra::ext(terr_ras)[4],
-                   crs=terra::crs(terr_ras))
-  .emp[]<- value
+ras_template <- function(value=NA){
+  g <- gdalio_get_default_grid()
+  .emp <- matrix(value, nrow = g$dimension[2], ncol = g$dimension[1])
+  # matrix(data=NA, g$dimension[1])[,g$dimension[2]:1, drop = FALSE]
   return(.emp)
 }
 
@@ -12,7 +9,7 @@ ras_template <- function(terr_ras, value=NA){
 veg_inference <- function(.tcd, .lcm, .nfi, .wat){
   
   reclass_tcd <- function(tcd, lcm){
-    .emp <- ras_template(lcm)
+    .emp <- ras_template()
     .emp[tcd > 0 & tcd <3] <- 2
     .emp[tcd >= 3 & tcd <10] <- 3
     .emp[tcd >= 10 & tcd <50] <- 4
@@ -27,7 +24,7 @@ veg_inference <- function(.tcd, .lcm, .nfi, .wat){
   }
   
   reclass_lcm <- function(lcm){
-    .Rlcm <- ras_template(lcm, value = 0)
+    .Rlcm <- ras_template(value = 0)
     .Rlcm[lcm == 1] <- 5
     .Rlcm[lcm == 2] <- 3
     .Rlcm[lcm %in% c(3, 5)] <- 2
@@ -36,16 +33,12 @@ veg_inference <- function(.tcd, .lcm, .nfi, .wat){
   }
   
   add_lcm <- function(Rlcm, Rtcd_nfi){
-    Rtcd_nfi[is.na(Rtcd_nfi)] <- Rlcm
+    Rtcd_nfi[is.na(Rtcd_nfi)] <- Rlcm[is.na(Rtcd_nfi)]
     return(Rtcd_nfi)
   }
   
   reclass_conifers <- function(lcm, Rtcd_nfi_lcm){
-    .conifer <- lcm
-    .conifer[lcm == 2] <- 1
-    .conifer[lcm != 2] <- NA
-  
-    Rtcd_nfi_lcm[.conifer == 1] <- 3
+    Rtcd_nfi_lcm[lcm == 2] <- 3
     return(Rtcd_nfi_lcm)
   }
   
@@ -55,90 +48,121 @@ veg_inference <- function(.tcd, .lcm, .nfi, .wat){
   }
   
   .Rtcd <- reclass_tcd(.tcd, .lcm)
+  rm(.tcd)
   
   .Rtcd_nfi <- add_nfi(.nfi, .Rtcd)
+  rm(.nfi, .Rtcd)
   
   .Rlcm <- reclass_lcm(.lcm)
   
   .Rtcd_nfi_lcm <- add_lcm(.Rlcm, .Rtcd_nfi)
+  rm(.Rlcm, .Rtcd_nfi)
   
   .Rtcd_nfi_lcm_con <- reclass_conifers(.lcm, .Rtcd_nfi_lcm)
+  rm(.lcm, .Rtcd_nfi_lcm)
   
   .Rtcd_nfi_lcm_con_wat <- reclass_water(.wat, .Rtcd_nfi_lcm_con)
+  rm(.wat, .Rtcd_nfi_lcm_con)
   
   return(.Rtcd_nfi_lcm_con_wat)
   
 }
 
 
-generate_bfi <- function(.bfi, .os_grid, .os_orn, .vmd){
+generate_bfi <- function(.bfi, .os_grid, .osm_rivs, .vmd){
   
-  hab_zone <- rasterize_water_buff(.bfi, .os_grid, .os_orn, .vmd)
+  hab_zone <- rasterize_water_buff(.os_grid, .osm_rivs, .vmd)
   
-  .bfi[is.na(hab_zone)] <- hab_zone
+  .bfi[is.na(hab_zone)] <- NA
   
   return(.bfi)
 }
 
 
-process_veg <- function(grid_sf, lcm, tcd, nfi, vmd, res, os_orn, bfi_save_dir){
+process_veg <- function(grid_sf, lcm, tcd, nfi, vmd, osm_rivs, mm_rivs, 
+                        res, bfi_save_dir){
+
+  nfi <- readRDS(nfi)
   
-  nfi <- load_nfi(nfi)
-  vmd <- load_vmd(vmd)
-  os_orn <- load_orn(os_orn)
+  vmd <- readRDS(vmd) #%>%
+    # st_cast(., 'POLYGON')
+  
+  
+  
+  
   #warp and set up rasters for math.
 
   set_up_gdalio(grid_sf, res) # sets default extents dims etc for warping
   
-  lcm_ter <- gdalio_terra(lcm, resample="near")
+  lcm_gd <- gdalio_matrix(lcm, resample="near")
   
-  tcd_ter <- gdalio_terra(tcd, resample="cubicspline")
+  tcd_gd <- gdalio_matrix(tcd, resample="cubicspline")
   
-  nfi_ter <- rasterize_nfi(lcm_ter, nfi)
-  
-  water_ras <- rasterize_vmd(lcm_ter, vmd)
+  nfi_gd <- fasterize_gdalio(.sf_obj=nfi, .field='woodland')
+    
+  water_gd <- fasterize_gdalio(.sf_obj= vmd, .field='water')
   
   # run the math
-  bfi <- veg_inference(tcd_ter, lcm_ter, nfi_ter, water_ras)
-  
+  bfi <- veg_inference(tcd_gd, lcm_gd, nfi_gd, water_gd) 
+  rm(tcd_gd, lcm_gd, nfi_gd, water_gd)  
   #save file
   
   save_path1 <- file.path(bfi_save_dir, 'bfi',
                          sprintf('%s_GB_BFI.tif',grid_sf$TILE_NAME[1]))
   
-  terra::writeRaster(bfi, save_path1, overwrite=TRUE)
+  terra::writeRaster(gdalio_to_terra(bfi), save_path1, overwrite=TRUE,
+                     gdal=c("COMPRESS=LZW", "TFW=YES"))
   
   # run the buffer clipping to make BHI.
-  bhi_open <- generate_bfi(bfi, grid_sf, os_orn, vmd)
-
+  osm_rivs <- readRDS(osm_rivs)
+  bhi_open <- generate_bfi(bfi, grid_sf, osm_rivs, vmd)
+  rm(osm_rivs)  
   #save file
   save_path2 <- file.path(bfi_save_dir, 'bhi',
                          sprintf('%s_GB_BHIop.tif',grid_sf$TILE_NAME[1]))
 
-  terra::writeRaster(bhi_open, save_path2, overwrite=TRUE)
-  message('this is where I am...')
-  return(c(bfi=save_path1, bhi=save_path2))
+  terra::writeRaster(gdalio_to_terra(bhi_open), save_path2, overwrite=TRUE,
+                     gdal=c("COMPRESS=LZW", "TFW=YES"))
   
-  # return(c(bfi=save_path1))
+  
+  # run the buffer clipping to make MMrivers BHI.
+  mm_rivs <- readRDS(mm_rivs)
+  bhi_MM_rivs <- generate_bfi(bfi, grid_sf, mm_rivs, vmd)
+  rm(mm_rivs)
+  #save file
+  save_path3 <- file.path(bfi_save_dir, 'bhi_mm_riv',
+                          sprintf('%s_GB_BHI_os_mm.tif',grid_sf$TILE_NAME[1]))
+  
+  terra::writeRaster(gdalio_to_terra(bhi_MM_rivs), save_path3, overwrite=TRUE,
+                     gdal=c("COMPRESS=LZW", "TFW=YES"))
+
+  return(c(bfi=save_path1, bhi=save_path2, bhi_mmrivs = save_path3))
   
 }
 
 
-map_veg_process <- function(grid_list, lcm, tcd, nfi, vmd, res, 
-                            os_orn, bfi_save_dir){
+map_veg_process <- function(grid_list, lcm, tcd, nfi.list, vmd.list, osmriv.list,
+                            mmriv.list, res, bfi_save_dir, .nworkers){
   #create folders...
   if (!file.exists(file.path(bfi_save_dir, 'bfi'))) {
     dir.create(file.path(bfi_save_dir, 'bfi'))}
   if (!file.exists(file.path(bfi_save_dir, 'bhi'))) {
     dir.create(file.path(bfi_save_dir, 'bhi'))}
+  if (!file.exists(file.path(bfi_save_dir, 'bhi_mm_riv'))) {
+    dir.create(file.path(bfi_save_dir, 'bhi_mm_riv'))}
   
-  # future::plan(multisession, workers = 2) # only 2 workers because this uses lots of RAM.
+  future::plan(future::multisession, workers = .nworkers)
+  p_list <- list(grid_list, nfi.list, vmd.list, osmriv.list, mmriv.list)
   
+  saved_files <- future_pmap(p_list, 
+                             ~process_veg(grid_sf=..1, lcm=lcm, tcd=tcd, nfi=..2, 
+                                          vmd=..3, osm_rivs=..4, mm_rivs=..5,
+                                          res=res, bfi_save_dir = bfi_save_dir))
+  # 
+  # message('AAAAHHHHH')
+  # saved_files <- purrr::pmap(p_list, ~process_veg(..1, lcm, tcd, ..2, ..3, ..4,
+  #                                                 res, bfi_save_dir))
 
-  saved_files <-grid_list %>%
-    purrr::map(., ~process_veg(., lcm, tcd, nfi, vmd, 
-                               res, os_orn, bfi_save_dir))
-  message('got to here...')
   
   return(saved_files)
   

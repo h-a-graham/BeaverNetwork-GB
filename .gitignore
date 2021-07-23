@@ -46,3 +46,6 @@ test_outs/
 int_files/
 bfi_out/
 data/
+
+#QGIS project files
+QGIS/

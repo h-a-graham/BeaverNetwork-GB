@@ -10,7 +10,8 @@ warp_method <- function(ras.list, file_name){
     
     sf::gdal_utils(util = "warp",
                    source = src_list,
-                   destination = file_name)
+                   destination = file_name,
+                   options = c("-co", "COMPRESS=LZW"))
     
     message('warp worked!')
     return(file_name)
