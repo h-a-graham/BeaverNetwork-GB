@@ -10,7 +10,6 @@ library(targets)
 
 tar_visnetwork(label='time', level_separation=300)
 
-
 tar_make() # run the targets workflow
 # tar_make(callr_function = NULL) # for debugging
 # targets::tar_make_future(workers = 4L) # not using this anymore.
@@ -19,7 +18,7 @@ tar_meta(fields = error, complete_only = TRUE) # show errors to help debugging.
 
 tar_read(download_OS_grid)[[46]]# to view the results the arg is the target name....
 
-tar_read(split_iterator)[[1]]s
+tar_read(split_iterator)[[1]]
 
 tar_read(proc_veg_tiles)
 

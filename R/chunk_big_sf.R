@@ -1,6 +1,14 @@
 load_nfi <- function(nfi){
   nfi <- sf::read_sf(nfi, 
-                 query= sprintf("SELECT CATEGORY FROM \"%s\" WHERE CATEGORY = 'Woodland'",
+                 query= sprintf("SELECT CATEGORY FROM \"%s\" WHERE CATEGORY = 'Woodland'
+                                AND IFT_IOA NOT IN (
+                                'Assumed woodland',
+                                'Cloud \\ shadow',
+                                'Failed','Felled', 
+                                'Ground prep', 
+                                'Uncertain', 
+                                'Windblow',
+                                'Young trees')",
                                 tools::file_path_sans_ext(basename(nfi)))) %>%
     mutate(woodland=1) 
   return(nfi)

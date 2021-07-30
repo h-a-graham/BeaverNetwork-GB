@@ -34,7 +34,7 @@ write_lines('<GDAL_WMS>
             </GDAL_WMS>', DTM_2020)
 
 
-# n <-'WMS:https://environment.data.gov.uk/spatialdata/lidar-composite-digital-terrain-model-dtm-1m-2020/wms.xml'
+n <-'https://environment.data.gov.uk/image/rest/services/SURVEY/LIDAR_Composite_1m_DTM_2020_Elevation/ImageServer?f=pjson'
 
 # gdalio::gdalio_set_default_grid()
 set_up_gdalio(os_gridSX, 10)

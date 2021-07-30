@@ -172,3 +172,25 @@ mm_riv_sf <- mm_dirs %>%
 sf::write_sf(mm_riv_sf, 'data/river_nets/os_MasterMap_Rivers/OS_MM_rivnet.gpkg')
 
 
+
+
+
+nfi_2018 <- 'data/vegetation/National_Forest_Inventory_Woodland_GB_2018-shp/8257a753-353e-48a5-8a6e-d69e63121aa5202041-1-1kunv01.h8eo.shp'
+full <- st_read(nfi_2018)
+
+full %>% 
+  filter(CATEGORY=='Woodland',
+         ! IFT_IOA %in% c('Assumed woodland','Cloud \\ shadow',
+         'Failed','Felled', 'Ground prep', 'Uncertain', 'Windblow')) %>%
+  select(IFT_IOA) %>%
+  st_drop_geometry() %>%
+  unique()
+
+.nfi <- load_nfi(nfi_2018)
+
+st_write(.nfi, 'test_outs/test_nfi2.gpkg', delete_dsn = T)
+
+
+source('R/hack_for_bdc.R')
+
+hack_for_bdc(tar_read(download_OS_grid))

@@ -14,6 +14,8 @@ source('R/download_osm_gb_rivers.R')
 source('R/chunk_big_sf.R')
 source('R/warp_bfi.R')
 
+source('R/hack_for_bdc.R') # won't be needed soon hopefull - needed to join up with python BDC workflow.
+
 # future::plan(future::multisession, workers = 4)
 # ==== target options ====
 options(tidyverse.quiet = TRUE)
@@ -83,8 +85,11 @@ list(
   tar_target(proc_veg_tiles,
              map_veg_process(download_OS_grid, ceh_lcm19, mosaic_tcd,
                              chunk_nfi, chunk_vmd,chunk_osm_rivs, chunk_MM_rivs,
-                             ras_res, bfi_dir, .nworkers=4)), # could increase workers to 5/6 but...
+                             ras_res, bfi_dir, .nworkers=5)), # could increase workers to 5/6 but...
   tar_target(warp_gb_bfi,
-             warp_bfi(proc_veg_tiles, bfi_dir, .nworkers=3)) # only needs 3 as we only have 3 rasters
+             warp_bfi(proc_veg_tiles, bfi_dir, .nworkers=3)), # only needs 3 as we only have 3 rasters
 
+  tar_target(hack_for_py,
+             hack_for_bdc(download_OS_grid)) # Remove this target once we refactor python BDC code.
+  
 )
