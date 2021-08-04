@@ -5,8 +5,8 @@ set_up_gdalio <- function(OS_grid, res){
     round()
   
   grid0 <- list(extent = c(bounds$xmin, bounds$xmax, bounds$ymin, bounds$ymax ), 
-                dimension = c((bounds$ymax-bounds$ymin)/res,
-                              (bounds$xmax-bounds$xmin)/res), 
+                dimension = c((bounds$xmax-bounds$xmin)/res,
+                              (bounds$ymax-bounds$ymin)/res), 
                 projection = st_crs(OS_grid)$wkt)
   gdalio_set_default_grid(grid0)
   
@@ -32,4 +32,12 @@ gdalio_matrix <- function(dsn, anti_rotate=TRUE, ...) {
     return(m)
   }
   
+}
+
+gdalio_terra <- function(dsn, ...) {
+  v <- gdalio_data(dsn, ...)
+  g <- gdalio_get_default_grid()
+  r <- terra::rast(terra::ext(g$extent), nrows = g$dimension[2], ncols = g$dimension[1], crs = g$projection)
+  if (length(v) > 1) terra::nlyr(r) <- length(v)
+  terra::setValues(r, do.call(cbind, v))
 }

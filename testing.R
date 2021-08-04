@@ -33,15 +33,21 @@ os_vmd <- 'data/vegetation/VectorMapDistrict/data/vmdvec_gb.gpkg'
 os_orn <- 'data/river_nets/oprvrs_gpkg_gb/data/oprvrs_gb.gpkg'
 
 # ==== BFI - desired resoltuion =====
-
+source(system.file("raster_format/raster_format.codeR", package = "gdalio", mustWork = TRUE))
 ras_res <- 10
 bfi_dir <- 'bfi_out'
 if (!dir.exists(bfi_dir)) dir.create(bfi_dir)
 
 os_grid <- 'C:/HG_Projects/Hugh_BDC_Files/GB_Beaver_modelling/OS_Grids/OSGB_Grid_100km.shp' %>%
   st_read() %>%
-  filter(TILE_NAME=='HT')
+  filter(TILE_NAME=='SX')
 
+set_up_gdalio(os_grid, 10)
+t <- gdalio_terra(mosaic_tcd)
+terra::plot(t)
+t <- gdalio_matrix(mosaic_tcd)
+image(t)
+gdalio_matrix(nfi_2018)
   
 fullgrid <- get_OS_grid()
 
@@ -186,6 +192,7 @@ full %>%
   st_drop_geometry() %>%
   unique()
 
+source('R/chunk_big_sf.R')
 .nfi <- load_nfi(nfi_2018)
 
 st_write(.nfi, 'test_outs/test_nfi2.gpkg', delete_dsn = T)
@@ -194,3 +201,36 @@ st_write(.nfi, 'test_outs/test_nfi2.gpkg', delete_dsn = T)
 source('R/hack_for_bdc.R')
 
 hack_for_bdc(tar_read(download_OS_grid))
+
+
+warp_method()
+
+
+# 
+sbd <- st_read('D:/HG_Work/GB_Beaver_Data/BeaverNetwork-scot/SummStats_BeaverNetwork_Scot/ScottishBasinDistrict_SummStats.shp')
+
+plot(st_geometry(sbd))
+
+st_bbox(sbd)
+
+
+##
+file.path(dirname( tar_read(warp_gb_bfi)$bhi), 'Scotland_Out')
+
+source('R/scotland_bfi_outs.R')
+scotland_bfi_outs(bind_rows(tar_read(download_OS_grid)), tar_read(warp_gb_bfi))
+
+
+fullgrid <- bind_rows(tar_read(download_OS_grid))
+
+scot_grid <- fullgrid %>%
+  st_filter(sbd, .pred = st_intersects)
+
+scot_grid$TILE_NAME
+
+plot(st_geometry(scot_grid), add=T)
+
+
+# bhi_list <- purrr::map(tar_read(proc_veg_tiles), ~.['bhi']) %>% unlist() %>% unname()
+bhi_mm_list <- purrr::map(tar_read(proc_veg_tiles), ~.['bhi_mmrivs']) %>% unlist() %>% unname()
+grep(sprintf('%s_GB_BHI_os_mm', 'SX'), bhi_mm_list, value=TRUE)

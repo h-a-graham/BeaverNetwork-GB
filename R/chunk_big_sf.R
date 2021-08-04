@@ -47,7 +47,7 @@ chunk_big_sf <- function(.svec_path, .os_gridList, .dataName, .int_dir,
     } else if (.dataName == 'mm_rivers'){
       big_sf <- sf::read_sf(.svecpath)
     } else {
-      stop("The .dataName arg is incorrect!")
+      stop("The .dataName argument is incorrect!")
     }
     
     g_name <- .grid$TILE_NAME

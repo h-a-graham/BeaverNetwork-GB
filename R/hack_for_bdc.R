@@ -18,7 +18,7 @@ hack_for_bdc <- function(.os_grid, .vmd_path= 'int_files/vmd',
                            full.names = T)
     
     readRDS(vmd_rdsP) %>%
-      st_write(., file.path(g_path, g_fname), delete_dsn=T)
+      write_sf(., file.path(g_path, g_fname), delete_dsn=T)
     
     
     bfi_files <- list.files(.bfi_dir, pattern = sprintf('%s',.grid$TILE_NAME),
@@ -30,5 +30,6 @@ hack_for_bdc <- function(.os_grid, .vmd_path= 'int_files/vmd',
   
   .os_grid %>%
     purrr::walk(., ~gen_stuff(.))
+  message('BDC files prepped for python.')
   
 }

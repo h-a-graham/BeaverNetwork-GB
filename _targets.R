@@ -13,6 +13,8 @@ source('R/process_veg.R')
 source('R/download_osm_gb_rivers.R')
 source('R/chunk_big_sf.R')
 source('R/warp_bfi.R')
+source('R/bfi_1km_res.R')
+source('R/scotland_bfi_outs.R')
 
 source('R/hack_for_bdc.R') # won't be needed soon hopefull - needed to join up with python BDC workflow.
 
@@ -66,22 +68,22 @@ list(
              warp_tcd(cop_tcd18, inter_data_dir)),
   # create path list for nfi blocks
   tar_target(chunk_nfi,
-             chunk_big_sf(nfi_2018, download_OS_grid, 
+             chunk_big_sf(nfi_2018, download_OS_grid,
                           'nfi', inter_data_dir, .nworkers=10)),
   # create path list for OS vmd water blocks
   tar_target(chunk_vmd,
-             chunk_big_sf(os_vmd, download_OS_grid, 
+             chunk_big_sf(os_vmd, download_OS_grid,
                           'vmd', inter_data_dir, .nworkers=15)),
   # create path list for OSM river network
   tar_target(chunk_osm_rivs,
-             chunk_big_sf(OSM_rivNet_download, download_OS_grid, 
+             chunk_big_sf(OSM_rivNet_download, download_OS_grid,
                           'osm_rivers', inter_data_dir, .nworkers=18)),
   tar_target(chunk_MM_rivs,
-             chunk_big_sf(os_mm_rivnet, download_OS_grid, 
+             chunk_big_sf(os_mm_rivnet, download_OS_grid,
                           'mm_rivers', inter_data_dir, .nworkers=5)), # minimise workers - the river network is v detailed
 
   # create national nfi raster
-  
+
   tar_target(proc_veg_tiles,
              map_veg_process(download_OS_grid, ceh_lcm19, mosaic_tcd,
                              chunk_nfi, chunk_vmd,chunk_osm_rivs, chunk_MM_rivs,
@@ -90,6 +92,10 @@ list(
              warp_bfi(proc_veg_tiles, bfi_dir, .nworkers=3)), # only needs 3 as we only have 3 rasters
 
   tar_target(hack_for_py,
-             hack_for_bdc(download_OS_grid)) # Remove this target once we refactor python BDC code.
-  
+             hack_for_bdc(download_OS_grid)), # Remove this target once we refactor python BDC code.
+  tar_target(resample_BHI_1km,
+             bfi_1km_res(warp_gb_bfi, bind_rows(download_OS_grid))),
+  tar_target(Scotland_BHI_ouputs,
+             scotland_bfi_outs(bind_rows(download_OS_grid), warp_gb_bfi))
+
 )

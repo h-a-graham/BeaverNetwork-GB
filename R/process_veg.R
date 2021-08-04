@@ -121,8 +121,7 @@ process_veg <- function(grid_sf, lcm, tcd, nfi, vmd, osm_rivs, mm_rivs,
   save_path2 <- file.path(bfi_save_dir, 'bhi',
                          sprintf('%s_GB_BHIop.tif',grid_sf$TILE_NAME[1]))
 
-  terra::writeRaster(gdalio_to_terra(bhi_open), save_path2, overwrite=TRUE,
-                     gdal=c("COMPRESS=LZW", "TFW=YES"))
+  terra::writeRaster(gdalio_to_terra(bhi_open), save_path2, overwrite=TRUE)
   
   
   # run the buffer clipping to make MMrivers BHI.
@@ -133,8 +132,7 @@ process_veg <- function(grid_sf, lcm, tcd, nfi, vmd, osm_rivs, mm_rivs,
   save_path3 <- file.path(bfi_save_dir, 'bhi_mm_riv',
                           sprintf('%s_GB_BHI_os_mm.tif',grid_sf$TILE_NAME[1]))
   
-  terra::writeRaster(gdalio_to_terra(bhi_MM_rivs), save_path3, overwrite=TRUE,
-                     gdal=c("COMPRESS=LZW", "TFW=YES"))
+  terra::writeRaster(gdalio_to_terra(bhi_MM_rivs), save_path3, overwrite=TRUE)
 
   return(c(bfi=save_path1, bhi=save_path2, bhi_mmrivs = save_path3))
   
@@ -163,7 +161,7 @@ map_veg_process <- function(grid_list, lcm, tcd, nfi.list, vmd.list, osmriv.list
   # saved_files <- purrr::pmap(p_list, ~process_veg(..1, lcm, tcd, ..2, ..3, ..4,
   #                                                 res, bfi_save_dir))
 
-  
+  message('veg processed')
   return(saved_files)
   
   
