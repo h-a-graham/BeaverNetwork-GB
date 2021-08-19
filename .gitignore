@@ -49,3 +49,8 @@ data/
 
 #QGIS project files
 QGIS/
+
+# Random extra folders that we don't want synced
+extras/
+
+

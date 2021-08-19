@@ -14,7 +14,7 @@ source('R/download_osm_gb_rivers.R')
 source('R/chunk_big_sf.R')
 source('R/warp_bfi.R')
 source('R/bfi_1km_res.R')
-source('R/scotland_bfi_outs.R')
+source('R/locl_bfi_outs.R')
 
 source('R/hack_for_bdc.R') # won't be needed soon hopefull - needed to join up with python BDC workflow.
 
@@ -96,6 +96,10 @@ list(
   tar_target(resample_BHI_1km,
              bfi_1km_res(warp_gb_bfi, bind_rows(download_OS_grid))),
   tar_target(Scotland_BHI_ouputs,
-             scotland_bfi_outs(bind_rows(download_OS_grid), warp_gb_bfi))
+             local_bfi_outs(bind_rows(download_OS_grid), bfi_dir, 'Scotland',
+                               proc_veg_tiles, 'bhi_mmrivs', warp_gb_bfi)),
+  tar_target(Cornwall_BHI_ouputs,
+             local_bfi_outs(bind_rows(download_OS_grid), bfi_dir, 'Cornwall',
+                            proc_veg_tiles, 'bhi', warp_gb_bfi))
 
 )
