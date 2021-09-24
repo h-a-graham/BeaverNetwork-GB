@@ -53,6 +53,7 @@ gdalwmscache/
 QGIS/
 
 # Random extra folders that we don't want synced
-extras/
-
-
+extras/regional_tech_report_cache/
+extras/regional_tech_report_files/
+extras/regional_tech_report.log
+extras/table_test.log
