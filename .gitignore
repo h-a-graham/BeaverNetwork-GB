@@ -46,6 +46,8 @@ test_outs/
 int_files/
 bfi_out/
 data/
+bdc_out/
+gdalwmscache/
 
 #QGIS project files
 QGIS/

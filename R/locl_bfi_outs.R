@@ -1,5 +1,5 @@
 local_bfi_outs <- function(.osgrids, bfi_dir, region, veg_tiles, version,
-                              nat_bfi){
+                              nat_bfi, .mask=NULL){
   
   out_dir <- file.path(bfi_dir, sprintf('%s_Out', region))
   
@@ -13,6 +13,9 @@ local_bfi_outs <- function(.osgrids, bfi_dir, region, veg_tiles, version,
   } else if (region == 'Cornwall') {
     tiles_needed <- c("SW", "SX", "SS")
     suffix <- 'CORN'
+  } else if (region == 'SouthWest') {
+    tiles_needed <- c("SO", "SP", "SS", "ST", "SU", "SW", "SX", "SY", "SZ")
+    suffix <-'SouthWest'
   }
   
   
@@ -33,6 +36,7 @@ local_bfi_outs <- function(.osgrids, bfi_dir, region, veg_tiles, version,
   bhi_out_path <- file.path(out_dir, sprintf('bhi_%s.tif', suffix))
   warp_method(bhi_list, bhi_out_path)
   
+  
   bounds <- filter(.osgrids, TILE_NAME %in% c(tiles_needed))
   
   # Now for 1km data.
@@ -43,6 +47,12 @@ local_bfi_outs <- function(.osgrids, bfi_dir, region, veg_tiles, version,
   } else if (version=='bhi'){
     bhi_terr1km <- gdalio_terra(nat_bfi$bhi, resample="Average")
   }
+  
+  if (!is.null(.mask)){
+    mask_crop_terra(bhi_out_path, .mask, bhi_out_path)
+    bhi_terr1km <- mask_crop_terra_mem(bhi_terr1km, .mask)
+  }
+  
   
   bhi_out_path1km <- file.path(out_dir, sprintf('bhi_1km_%s.tif', suffix))
   terra::writeRaster(bhi_terr1km, bhi_out_path1km, overwrite=TRUE)

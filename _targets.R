@@ -15,10 +15,10 @@ source('R/chunk_big_sf.R')
 source('R/warp_bfi.R')
 source('R/bfi_1km_res.R')
 source('R/locl_bfi_outs.R')
-
+source('R/mask_crop_terra.R')
 source('R/hack_for_bdc.R') # won't be needed soon hopefull - needed to join up with python BDC workflow.
 
-# future::plan(future::multisession, workers = 4)
+future::plan(future::multisession, workers = 4)
 # ==== target options ====
 options(tidyverse.quiet = TRUE)
 tar_option_set(packages = c("sf", "tidyverse", "purrr", "furrr", "curl", "zip", "terra",
@@ -100,6 +100,10 @@ list(
                                proc_veg_tiles, 'bhi_mmrivs', warp_gb_bfi)),
   tar_target(Cornwall_BHI_ouputs,
              local_bfi_outs(bind_rows(download_OS_grid), bfi_dir, 'Cornwall',
-                            proc_veg_tiles, 'bhi', warp_gb_bfi))
+                            proc_veg_tiles, 'bhi', warp_gb_bfi)),
+  tar_target(SouthWest_BHI_ouputs,
+             local_bfi_outs(bind_rows(download_OS_grid), bfi_dir, 'SouthWest',
+                            proc_veg_tiles, 'bhi', warp_gb_bfi, 
+                            'data/regions/SW_buffer.gpkg'))
 
 )

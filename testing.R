@@ -18,7 +18,7 @@ library(fasterize)
 library(gdalio)
 library(stars)
 library(osmextract)
-
+library(targets)
 # ==== Define raw data locations: ====
 # CEH landcover 2019 20m raster
 ceh_lcm19 <-'data/vegetation/FME_346E606F_1626178964646_1149/data/643eb5a9-9707-4fbb-ae76-e8e53271d1a0/gb2019lcm20m.tif'
@@ -234,3 +234,91 @@ plot(st_geometry(scot_grid), add=T)
 # bhi_list <- purrr::map(tar_read(proc_veg_tiles), ~.['bhi']) %>% unlist() %>% unname()
 bhi_mm_list <- purrr::map(tar_read(proc_veg_tiles), ~.['bhi_mmrivs']) %>% unlist() %>% unname()
 grep(sprintf('%s_GB_BHI_os_mm', 'SX'), bhi_mm_list, value=TRUE)
+
+
+### -----------
+
+#masking test
+
+big_R <- terra::rast(tar_read(SouthWest_BHI_ouputs)$localBHI)
+
+plot(big_R)
+
+mask <- read_sf('data/regions/SW_counties.gpkg') %>%
+  st_union() %>%
+  st_buffer(5000) %>%
+  st_as_sf() %>%
+  mutate(val=1)
+
+crop_R <- terra::crop(big_R, mask)
+
+mask_R <- terra::mask(crop_R, as(mask, 'SpatVector'))
+
+plot(mask_R)
+
+tfile <- tempfile(fileext = '.tif')
+mask_R <- fasterize::fasterize(mask, raster = raster::raster(big_R))
+
+dim(mask_R)
+
+r <- terra::rast(terra::ext(raster::extent(mask_R)), nrows = dim(mask_R)[1], 
+                 ncols = dim(mask_R)[2], crs = raster::crs(mask_R))
+  
+r <- terra::setValues(r, as.matrix(mask_R))
+
+
+raster::writeRaster(mask_R, tfile)
+
+mask_Rt <- terra::rast(tfile)
+
+masked_R <- terra::mask(big_R, mask_R)
+
+
+plot(mask_R)
+
+
+
+mask <- read_sf('data/regions/SW_counties.gpkg') %>%
+  st_union() %>%
+  st_buffer(5000) %>%
+  st_as_sf() %>%
+  mutate(val=1)
+
+write_sf(mask, 'data/regions/SW_buffer.gpkg')
+
+
+
+
+
+mask_crop_terra <- function(ras_path, vec_path, out_path){
+  big_R <- terra::rast(ras_path)
+  
+  crop_R <- terra::crop(big_R, vec_path)
+  
+  mask_R <- terra::mask(crop_R, vect(vec_path))
+  
+  terra::writeRaster(mask_R, out_path, overwrite=TRUE)
+}
+
+
+mask_raster <- function(ras_path, vec_path, out_ras){
+  # if (file.exists(out_ras)) (file.remove(out_ras))
+  
+  sf::gdal_utils('warp',
+             source=ras_path,
+             destination = tempfile(fileext = '.tif'),
+             options = c('-cutline', vec_path,
+                         '-crop_to_cutline', ras_path))
+}
+
+microbenchmark::microbenchmark(
+
+mask_raster(tar_read(SouthWest_BHI_ouputs)$localBHI,
+            normalizePath('test_outs/SW_aoi.gpkg'),
+            normalizePath('test_outs/SW_MASK_v2.tif')),
+
+mask_terra(tar_read(SouthWest_BHI_ouputs)$localBHI,
+           normalizePath('test_outs/SW_aoi.gpkg'),
+           normalizePath('test_outs/SW_MASK_v3.tif')),
+times = 1L)
+
