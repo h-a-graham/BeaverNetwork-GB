@@ -140,7 +140,7 @@ We have therefore used the BRAT framework to develop an optimised beaver dam cap
 
 The model infers the density of dams that can be supported by stream reaches (110 m ± 50 SD) across a catchment. Using low-cost and open-source datasets, the following attributes are calculated for each reach: (i) stream gradient, (ii) low (Q80) and high flow (Q2) stream power, (iii) bankfull width, (iv) stream order, and (v) the suitability of vegetation, within 10m and 40m of the bank, for beaver dam construction. These controlling variables are combined using a sequence of inference and fuzzy inference systems which follow an expert-defined rules system that allows for the considerable uncertainty often associated with these types of complex ecological processes.
 
-Each reach was classified for dam capacity using five categories from none, defined as no capacity for damming to pervasive where a maximum capacity of 16-40 dams could theoretically be constructed in a km of channel. It is important to note that the model assumes both reach and catchment population carrying capacity for beaver. Therefore, in reality the maximum number of dams indicated in a category class is unlikely to occur. A full list of BDC classifications is included in Table 2.
+Each reach was classified for dam capacity using five categories from none, defined as no capacity for damming to pervasive where a maximum capacity of 16-30 dams could theoretically be constructed in a km of channel. It is important to note that the model assumes both reach and catchment population carrying capacity for beaver. Therefore, in reality the maximum number of dams indicated in a category class is unlikely to occur. A full list of BDC classifications is included in Table 2.
 
 *Tale 2: BDC calssifications and definitions*
 
@@ -153,10 +153,6 @@ bdc_class()
 ## BeaverNetwork-South West
 
 The BeaverNetwork-SouthWest model provides a synthesis of both the BHI and BDC models. For each reach there are therefore estimates for the forage suitability within 10 and 40m of the river bank and the dam capacity for the reach. In addition to these data, information for the probability of forage and dam construction and the number of dams which is estimated for the reach (including confidence limits) based on observed foraging/dam building behaviour as demonstrated in Graham, et al. (2020). The probability of forage/dam construction was calculated using binomial Bayesian modelling and dam number estimates were calculated using regression analysis (zero-inflated negative binomial model).
-
-### BeaverNetwork Method summary
-
-...
 
 ```{r BeaverNetwork_SW, echo=FALSE, warning=FALSE,message=FALSE,error=FALSE, results='hide',fig.keep='all'}
 
@@ -177,7 +173,7 @@ tm_shape(bdc)+
 
 ```
 
-*Figure3: BeaverNetwork-SouthWest* ...
+*Figure3: BeaverNetwork-SouthWest* displaying Beaver Dam Capacity data for all reaches.
 
 *Table 3: Description of variables provided with the county summary polygon file*
 
@@ -189,7 +185,7 @@ bdc_data_table()
 
 ## County Scale summary statistics
 
-...
+A range of summary statistics were calculated by carrying out a spatial join between the BeaverNetwork features and the county polygons. A range of summary statistics, desribed in Table 4, were derived to provide regional understanding. A selction of these summary stats are presented as a facet plot in Figure 4 and as a bivariate choropleth map in figure 5.
 
 ```{r County summary, echo=FALSE, warning=FALSE,message=FALSE,error=FALSE, results='hide',fig.keep='all'}
 
@@ -215,7 +211,7 @@ tm_shape(bdc_LongJ) +
 
 *Figure 4: Summary satatistics for South West Counties. This figures serves as an example for the types of satistics that can be derived for regions.*
 
-...
+Figure 5 serves as an example on how this data may be used to select or prioritise different regions for beaver reintroduction or management based on the interaction of multiple factors. In this example we compare the estimate dam density (under carrying capacity) with the proportion of the river network with preferred forage (within 40m of the bank). Here we can make inferences on how landuse and topographic differences in regions can influence the potential imapct of beavers.
 
 ```{r Bivariate Map, echo=FALSE, warning=FALSE,message=FALSE,error=FALSE, results='hide',fig.keep='all' }
 # Import function
@@ -233,12 +229,6 @@ bivariate_choropleth(bdc_joinSP, c("Est_DamD", "BFI40_P_PR"),
 ```
 
 *Figure 5: Bivariate map comparing habitat suitability (% preferred Habitat) and potential dam density (The estimated density of dams at population capacity)*
-
-...
-
-### County Summary data description.
-
-...
 
 *Table 4: Description of variables provided with the county summary polygon file*
 

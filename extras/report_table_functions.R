@@ -264,7 +264,7 @@ Data_inv <- function(){
     kable_styling(full_width = F, 
                   latex_options = c("repeat_header"),
                   font_size = 9) %>%
-    column_spec(1, width = "10em") %>%
-    column_spec(2, width = "30em")
+    column_spec(1, width = "25em") %>%
+    column_spec(2, width = "25em")
   
 }
