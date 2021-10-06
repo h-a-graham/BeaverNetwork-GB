@@ -1,9 +1,16 @@
 ---
-title: "table test"
-subtitle: "Data summary report"
-author: "Hugh Graham"
-date: "23/09/2021"
-output: pdf_document
+title: "OpenBeaverNetwork and Beaver Habitat Index"
+subtitle: "Data summary report (South West)"
+author: | 
+  | Hugh A. Graham, Alan Puttock, Richard E. Brazier
+  | *Centre for Resilience in Environment, Water and Waste (CREWW), Geography, College of Life and  Environmental Sciences, University of Exeter, Exeter, UK*
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+fontfamily: mathpazo
+fontsize: 11pt
+urlcolor: blue
 header-includes:
   - \usepackage{titling}
   - \pretitle{\begin{flushleft}\fontsize{18bp}{18bp}\selectfont}
@@ -12,15 +19,14 @@ header-includes:
   - \postauthor{\end{flushleft}}
   - \usepackage{fancyhdr}
   - \fancypagestyle{firststyle}{}
-  \allsectionsfont{\centering}
+bibliography: references.bib
 ---
 
+```{=tex}
 \thispagestyle{firststyle}
 \lhead{\includegraphics[height=1.2cm]{C:/HG_Projects/BeaverNetwork-GB/extras/logos/CREWW_logo.png}} 
-\rhead{\includegraphics[height=1.2cm]{C:/HG_Projects/BeaverNetwork-GB/extras/logos/logo.png}} 
-
-
-
+\rhead{\includegraphics[height=1.2cm]{C:/HG_Projects/BeaverNetwork-GB/extras/logos/logo.png}}
+```
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(here)
@@ -30,13 +36,13 @@ library(kableExtra)
 
 ## R Markdown
 
-Table 1: provides definitions for the BHI values. A value of five represents vegetation that is highly suitable or preferred by beavers and that also lies within 100 m of a waterbody. Zero scores are given to areas that contain no vegetation or are greater than 100 m from a waterbody. It is important to note that the model considers terrestrial habitat, where foraging primarily occurs, and therefore watercourses themselves are also scored zero.
-center
+Table 1: provides definitions for the BHI values. A value of five represents vegetation that is highly suitable or preferred by beavers and that also lies within 100 m of a waterbody. Zero scores are given to areas that contain no vegetation or are greater than 100 m from a waterbody. It is important to note that the model considers terrestrial habitat, where foraging primarily occurs, and therefore watercourses themselves are also scored zero. center
+
+ 
 
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
 
 ```{r Conty summary stats variable table,  echo=FALSE, warning=FALSE,message=FALSE,error=FALSE,fig.keep='all'}
 source(file.path(here(), 'extras', 'report_table_functions.R'))
@@ -45,7 +51,6 @@ SummaryVarsTable()
 
 ```
 
-
 ```{r bdc summary stats variable table,  echo=FALSE, warning=FALSE,message=FALSE,error=FALSE,fig.keep='all'}
 source(file.path(here(), 'extras', 'report_table_functions.R'))
 
@@ -53,29 +58,48 @@ bdc_data_table()
 
 ```
 
-
 <!-- ```{r setup2, include=FALSE} -->
+
 <!-- knitr::opts_chunk$set(echo = TRUE) -->
+
 <!-- library(sf) -->
+
 <!-- library(tmap) -->
+
 <!-- library(stars) -->
+
 <!-- library(maptiles) -->
+
 <!-- library(tidyr) -->
+
 <!-- library(here) -->
+
 <!-- library(dplyr) -->
+
 <!-- library(kableExtra) -->
+
 <!-- source(file.path(here(), 'extras', 'report_table_functions.R')) -->
+
 <!-- ``` -->
 
 <!-- ```{r Load Data, include=FALSE} -->
+
 <!-- bdc <- read_sf(file.path(here::here(),'bdc_out/BeaverNetwork_SouthWest.gpkg')) -->
+
 <!-- bdc_join <- read_sf(file.path(here(),'bdc_out/BeavNet_CountySumm_SouthWest.gpkg')) -->
+
 <!-- # bdc_osm <- get_tiles(bdc, crop = TRUE, zoom = 8) -->
+
 <!-- # get basemap -->
+
 <!-- bdc_osm <- get_tiles(st_buffer(bdc_join, 10000), crop = TRUE, zoom = 9,  -->
+
 <!--                      provider=  "Stamen.TerrainBackground", -->
+
 <!--                      apikey = '6b63726a1a684ed986f42097f8b3e00c') -->
+
 <!-- bhi <- stars::read_stars(file.path(here::here(),'bfi_out/SouthWest_Out/bhi_SouthWest.tif')) -->
+
 <!-- ``` -->
 
 <!-- ## Introduction -->
@@ -89,27 +113,39 @@ bdc_data_table()
 <!-- ### BHI Method Summary -->
 
 <!-- <div style="page-break-after: always; visibility: hidden">  -->
+
 <!-- \pagebreak  -->
+
 <!-- </div> -->
 
 <!-- Some methods... -->
 
-
-
-
 <!-- ```{r Beaver Habitat Index, echo=FALSE, warning=FALSE,message=FALSE,error=FALSE, results='hide',fig.keep='all'} -->
 
 <!-- tm_shape(bdc_osm, bbox=st_bbox(bdc))+ -->
+
 <!--   tm_rgb(alpha=0.4,legend.show = FALSE)+ -->
+
 <!-- tm_shape(bhi) + -->
+
 <!--   tm_raster(palette='YlGnBu', -->
+
 <!--             labels = c('Unsuitable: <=1', 'Barely: 2','Moderate: 3',  -->
+
 <!--                        'Suitable: 4', 'Highly Suitable: 5'), -->
+
 <!--             title = 'Beaver Forage Index') + -->
+
 <!--   tm_compass(position=c("right", "top")) + -->
+
 <!--   tm_scale_bar(position=c("right", "bottom"))+ -->
+
 <!--   tm_layout(legend.title.fontfamily='serif', -->
+
 <!--             legend.text.fontfamily='serif', -->
+
 <!--             legend.title.size = 1.1) -->
+
 <!-- ``` -->
+
 <!-- *Figure 2: Beaver Habitat Index (BHI). Ranges from 0-5...* -->

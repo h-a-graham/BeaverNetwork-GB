@@ -155,7 +155,7 @@ bdc_data_table <- function(){
       assuming that beaver are active within the catchment.",
       "The estimated number of dams in a given reach, if beaver are active 
       within it. This value is to be used to quantify the likely number of 
-      dams that may occur at the sub-catchment scale (ca. ≥ 5 km2) as a 
+      dams that may occur at the sub-catchment scale (ca. >= 5 km2) as a 
       minimum (Graham et al., 2020). For estimating the number of dams that may 
       occur in a single reach (or beaver territory), 'BDC' is a more appropriate 
       metric.",
@@ -241,6 +241,8 @@ Data_inv <- function(){
     "BeaverNetwork_SouthWest.zip",
     "BeavNet_CountySumm_SouthWest.gpkg",
     "BeavNet_CountySumm_SouthWest.zip",
+    "BeavNet_EA_WaterBods_SouthWest.gpkg",
+    "BeavNet_EA_WaterBods_SouthWest.zip",
     "bhi_SouthWest.tif",
     "bhi_1km_SouthWest.tif"
   ),
@@ -251,9 +253,11 @@ Data_inv <- function(){
     suitability, hydrometric/topographic variables such as stream power, 
     gradient and stream width.',
     'The same BeaverNetwork dataset in ESRI Shapefile (.shp) format. All 
-    contituent files are stored in a compressed folder.',
+    contituent files are stored in a compressed (.zip) folder.',
     'Summarised BeaverNetwork data for county regions in GeoPackage format.',
-    'Summarised BeaverNetwork data for county regions in ESRI shapefile format.',
+    'Summarised BeaverNetwork data for county regions in "zipped" ESRI shapefile format.',
+    'Summarised BeaverNetwork data for Environment Agency Water Body Areas in GeoPackage format.',
+    'Summarised BeaverNetwork data for Environment Agency Water Body Areas in "zipped" ESRI shapefile format.',
     'Fine (High) resolution (10 m) Beaver Habitat Index for the South West region. in 
     Geotiff (.tif) format.',
     'Coarse (Low) resolution (1 km) Beaver Habitat Index for the South West region. in 
