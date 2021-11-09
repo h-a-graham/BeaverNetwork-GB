@@ -16,7 +16,20 @@ local_bfi_outs <- function(.osgrids, bfi_dir, region, veg_tiles, version,
   } else if (region == 'SouthWest') {
     tiles_needed <- c("SO", "SP", "SS", "ST", "SU", "SW", "SX", "SY", "SZ")
     suffix <-'SouthWest'
-  }
+  } else if (region == 'Wales') {
+    tiles_needed <- c("ST", "SS", "SN", "SM", "SH", "SJ", "SO")
+    suffix <-'Wales'
+  } else if (region == 'SouthEast') {
+    tiles_needed <- c("SZ", "SU", "SP", "TL", "TQ", "TV", "TR", "TM")
+    suffix <-'SouthEast'
+  } else if (region == 'Midlands') {
+    tiles_needed <- c("SO", "SJ", "SD", "SE", "SK", "SP", "TL", "TF", 
+                      "TG", "TM")
+    suffix <-'Midlands'
+  } else if (region == 'North') {
+    tiles_needed <- c("SJ", "SD", "NY", "NT", "NU", "NZ", "SE", "TA")
+    suffix <-'North'
+  } 
   
   
   bhi_mm_list <- purrr::map(veg_tiles, ~.[version]) %>% unlist() %>% unname()

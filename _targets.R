@@ -17,7 +17,8 @@ source('R/bfi_1km_res.R')
 source('R/locl_bfi_outs.R')
 source('R/mask_crop_terra.R')
 source('R/hack_for_bdc.R') # won't be needed soon hopefull - needed to join up with python BDC workflow.
-
+source('R/create_region_aois.R')
+source('R/clip_bdc_region.R')
 future::plan(future::multisession, workers = 4)
 # ==== target options ====
 options(tidyverse.quiet = TRUE)
@@ -35,6 +36,9 @@ nfi_2018 <- 'data/vegetation/National_Forest_Inventory_Woodland_GB_2018-shp/8257
 os_vmd <- 'data/vegetation/VectorMapDistrict/data/vmdvec_gb.gpkg'
 # OS MAsterMapRivers (CLOSED DATA.)
 os_mm_rivnet <- 'data/river_nets/os_MasterMap_Rivers/OS_MM_rivnet.gpkg'
+
+# GB Counties 
+GBCounty <- 'data/regions/GB_counties.gpkg'
 
 # ==== BFI - desired resoltuion =====
 
@@ -100,10 +104,38 @@ list(
                                proc_veg_tiles, 'bhi_mmrivs', warp_gb_bfi)),
   tar_target(Cornwall_BHI_ouputs,
              local_bfi_outs(bind_rows(download_OS_grid), bfi_dir, 'Cornwall',
-                            proc_veg_tiles, 'bhi', warp_gb_bfi)),
+                            proc_veg_tiles, 'bhi', warp_gb_bfi, 
+                            generate_WLT_regions('Cornwall', GBCounty))),
   tar_target(SouthWest_BHI_ouputs,
              local_bfi_outs(bind_rows(download_OS_grid), bfi_dir, 'SouthWest',
                             proc_veg_tiles, 'bhi', warp_gb_bfi, 
-                            'data/regions/SW_buffer.gpkg'))
-
+                            generate_WLT_regions('SouthWest', GBCounty))),
+  tar_target(SouthEast_BHI_ouputs,
+             local_bfi_outs(bind_rows(download_OS_grid), bfi_dir, 'SouthEast',
+                            proc_veg_tiles, 'bhi', warp_gb_bfi, 
+                            generate_WLT_regions('SouthEast', GBCounty))),
+  tar_target(Midlands_BHI_ouputs,
+             local_bfi_outs(bind_rows(download_OS_grid), bfi_dir, 'Midlands',
+                            proc_veg_tiles, 'bhi', warp_gb_bfi, 
+                            generate_WLT_regions('Midlands', GBCounty))),
+  tar_target(North_BHI_ouputs,
+             local_bfi_outs(bind_rows(download_OS_grid), bfi_dir, 'North',
+                            proc_veg_tiles, 'bhi', warp_gb_bfi, 
+                            generate_WLT_regions('North', GBCounty))),
+  tar_target(Wales_BHI_ouputs,
+             local_bfi_outs(bind_rows(download_OS_grid), bfi_dir, 'Wales',
+                            proc_veg_tiles, 'bhi', warp_gb_bfi, 
+                            generate_WLT_regions('Wales', GBCounty))),
+  tar_target(SouthWest_BDC_ouputs,
+             clip_bdc_region(generate_WLT_regions('SouthWest', GBCounty), 'SouthWest')),
+  tar_target(SouthEast_BDC_ouputs,
+             clip_bdc_region(generate_WLT_regions('SouthEast', GBCounty), 'SouthEast')),
+  tar_target(Midlands_BDC_ouputs,
+             clip_bdc_region(generate_WLT_regions('Midlands', GBCounty), 'Midlands')),
+  tar_target(North_BDC_ouputs,
+             clip_bdc_region(generate_WLT_regions('North', GBCounty), 'North')),
+  tar_target(Wales_BDC_ouputs,
+             clip_bdc_region(generate_WLT_regions('Wales', GBCounty), 'Wales')),
+  tar_target(Cornwall_BDC_ouputs,
+             clip_bdc_region(generate_WLT_regions('Cornwall', GBCounty), 'Cornwall'))
 )

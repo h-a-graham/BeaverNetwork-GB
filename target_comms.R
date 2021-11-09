@@ -13,7 +13,7 @@ tar_visnetwork(label='time', level_separation=300)
 
 tar_make() # run the targets workflow
 # tar_make(callr_function = NULL) # for debugging
-targets::tar_make_future(workers = 4L) # not using this anymore.
+targets::tar_make_future(workers = 6L) # not using this anymore.
 
 tar_meta(fields = error, complete_only = TRUE) # show errors to help debugging.
 
@@ -23,7 +23,7 @@ tar_read(split_iterator)[[1]]
 
 tar_read(warp_gb_bfi)
 tar_read(proc_veg_tiles)
-
+tar_read(hack_for_py)
 # purrr::map(tar_read(chunk_nfi), ~print(.))
 
 

@@ -322,3 +322,7 @@ mask_terra(tar_read(SouthWest_BHI_ouputs)$localBHI,
            normalizePath('test_outs/SW_MASK_v3.tif')),
 times = 1L)
 
+
+
+source('R/create_region_aois.R')
+generate_WLT_regions('SouthWest')

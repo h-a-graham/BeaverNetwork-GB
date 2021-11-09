@@ -1,6 +1,6 @@
 ---
 title: "OpenBeaverNetwork and Beaver Habitat Index"
-subtitle: "Data summary report (South West)"
+# subtitle: "Data summary report "
 author: | 
   | Hugh A. Graham, Alan Puttock, Richard E. Brazier
   | *Centre for Resilience in Environment, Water and Waste (CREWW), Geography, College of Life and  Environmental Sciences, University of Exeter, Exeter, UK*
@@ -12,14 +12,35 @@ fontfamily: mathpazo
 fontsize: 11pt
 urlcolor: blue
 header-includes:
+  - \usepackage{fancyhdr}
+  - \usepackage{booktabs}
+  - \usepackage{longtable}
+  - \usepackage{array}
+  - \usepackage{multirow}
+  - \usepackage{wrapfig}
+  - \usepackage{float}
+  - \usepackage{colortbl}
+  - \usepackage{pdflscape}
+  - \usepackage{tabu}
+  - \usepackage{threeparttable}
+  - \usepackage{threeparttablex}
+  - \usepackage[normalem]{ulem}
+  - \usepackage{makecell}
+  - \usepackage{xcolor}
   - \usepackage{titling}
   - \pretitle{\begin{flushleft}\fontsize{18bp}{18bp}\selectfont}
   - \posttitle{\end{flushleft}}
   - \preauthor{\begin{flushleft}\fontsize{13bp}{13bp}\selectfont}
   - \postauthor{\end{flushleft}}
-  - \usepackage{fancyhdr}
   - \fancypagestyle{firststyle}{}
 bibliography: references.bib
+params: 
+    set_region: "REGION"
+    set_beavNet: "BEAVNET"
+    set_CountySumm: "Csum"
+    set_WatBods: "WATBODS"
+    set_BHI: "BHI"
+subtitle: "Data summary report - `r params$set_region`"
 ---
 
 ```{=tex}
@@ -55,7 +76,7 @@ bhi <- stars::read_stars(file.path(here::here(),'bfi_out/SouthWest_Out/bhi_South
 
 ## Introduction
 
-This document accompanies the OpenBeaverNetwork (OBN) and Beaver Habitat Index (BHI) datasets for the South West region of England which have been provided to the Wildlife Trust in partnership with the University of Exeter (UoE). Also included are summary statistics (as polygon spatial vector) of the OBN for each SW county, as defined by the [Office for National Statistics](https://geoportal.statistics.gov.uk/datasets/6638c31a8e9842f98a037748f72258ed_0/explore?location=54.650000%2C-3.250000%2C5.81), and for Environment Agency (EA) [Water Body areas](https://environment.data.gov.uk/catchment-planning). The purpose of this document is to briefly outline modelling methods and to describe the structure and contents of the data to enable interrogation and interpretation by Wildlife Trust colleagues. These data are derived from open source products and are therefore free to share with acknowledgement of @graham2020.
+This document accompanies the OpenBeaverNetwork (OBN) and Beaver Habitat Index (BHI) datasets for the `r params$set_region` region of England which have been provided to the Wildlife Trust in partnership with the University of Exeter (UoE). Also included are summary statistics (as polygon spatial vector) of the OBN for each SW county, as defined by the [Office for National Statistics](https://geoportal.statistics.gov.uk/datasets/6638c31a8e9842f98a037748f72258ed_0/explore?location=54.650000%2C-3.250000%2C5.81), and for Environment Agency (EA) [Water Body areas](https://environment.data.gov.uk/catchment-planning). The purpose of this document is to briefly outline modelling methods and to describe the structure and contents of the data to enable interrogation and interpretation by Wildlife Trust colleagues. These data are derived from open source products and are therefore free to share with acknowledgement of @graham2020.
 
 ## Dataset Inventory
 
@@ -160,7 +181,7 @@ bdc_class()
 
 ```
 
-## BeaverNetwork-South West
+## BeaverNetwork-`r params$set_region`
 
 The BeaverNetwork-SouthWest model provides a synthesis of both the BHI and BDC models. For each reach there are therefore estimates for the forage suitability within 10 and 40m of the river bank and the dam capacity for the reach. In addition to these data, information for the probability of forage and dam construction and the number of dams which is estimated for the reach (including confidence limits) based on observed foraging/dam building behaviour as demonstrated in Graham, et al. (2020). The probability of forage/dam construction was calculated using binomial Bayesian modelling and dam number estimates were calculated using regression analysis (zero-inflated negative binomial model). Predictions for reach scale dam counts should only be considered as a sum at the (sub) catchment scale (\>= 5km^2^).
 
@@ -237,7 +258,7 @@ tmap_facet(bdc_LongJ)
 
 ```
 
-*Figure 4: Summary satatistics for South West Counties. This figures serves as an example for the types of satistics that can be derived for regions.*
+*Figure 4: Summary satatistics for `r params$set_region` Counties. This figures serves as an example for the types of satistics that can be derived for regions.*
 
 ```{r WaterBod summary, echo=FALSE, warning=FALSE,message=FALSE,error=FALSE, results='hide',fig.keep='all'}
 
@@ -251,7 +272,7 @@ bdcWB_LongJ <- bdc_WBs %>%
 
 ```
 
-*Figure 5: Summary satatistics for South West EA Water Body Areas.*
+*Figure 5: Summary satatistics for `r params$set_region` EA Water Body Areas.*
 
 &nbsp;
 

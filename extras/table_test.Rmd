@@ -1,6 +1,6 @@
 ---
 title: "OpenBeaverNetwork and Beaver Habitat Index"
-subtitle: "Data summary report (South West)"
+# subtitle: "Data summary report (South West)"
 author: | 
   | Hugh A. Graham, Alan Puttock, Richard E. Brazier
   | *Centre for Resilience in Environment, Water and Waste (CREWW), Geography, College of Life and  Environmental Sciences, University of Exeter, Exeter, UK*
@@ -12,14 +12,31 @@ fontfamily: mathpazo
 fontsize: 11pt
 urlcolor: blue
 header-includes:
+  - \usepackage{fancyhdr}
+  - \usepackage{booktabs}
+  - \usepackage{longtable}
+  - \usepackage{array}
+  - \usepackage{multirow}
+  - \usepackage{wrapfig}
+  - \usepackage{float}
+  - \usepackage{colortbl}
+  - \usepackage{pdflscape}
+  - \usepackage{tabu}
+  - \usepackage{threeparttable}
+  - \usepackage{threeparttablex}
+  - \usepackage[normalem]{ulem}
+  - \usepackage{makecell}
+  - \usepackage{xcolor}
   - \usepackage{titling}
   - \pretitle{\begin{flushleft}\fontsize{18bp}{18bp}\selectfont}
   - \posttitle{\end{flushleft}}
   - \preauthor{\begin{flushleft}\fontsize{13bp}{13bp}\selectfont}
   - \postauthor{\end{flushleft}}
-  - \usepackage{fancyhdr}
   - \fancypagestyle{firststyle}{}
 bibliography: references.bib
+params: 
+    set_region: "REGION"
+subtitle: "Data summary report - `r params$set_region`"
 ---
 
 ```{=tex}
@@ -36,7 +53,7 @@ library(kableExtra)
 
 ## R Markdown
 
-Table 1: provides definitions for the BHI values. A value of five represents vegetation that is highly suitable or preferred by beavers and that also lies within 100 m of a waterbody. Zero scores are given to areas that contain no vegetation or are greater than 100 m from a waterbody. It is important to note that the model considers terrestrial habitat, where foraging primarily occurs, and therefore watercourses themselves are also scored zero. center
+Table 1: `r params$set_region` provides definitions for the BHI values. A value of five represents vegetation that is highly suitable or preferred by beavers and that also lies within 100 m of a waterbody. Zero scores are given to areas that contain no vegetation or are greater than 100 m from a waterbody. It is important to note that the model considers terrestrial habitat, where foraging primarily occurs, and therefore watercourses themselves are also scored zero. center
 
  
 
