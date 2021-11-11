@@ -1,5 +1,3 @@
-source('R/chunk_big_sf.R')
-source('R/get_OS_grid.R')
 source('R/check_data.R')
 source('R/get_OS_grid.R')
 source('R/warp_tcd.R')
@@ -7,6 +5,18 @@ source('R/warp_method.R')
 source('R/set_up_gdalio.R')
 source('R/rasterize_vectors.R')
 source('R/process_veg.R')
+source('R/download_osm_gb_rivers.R')
+source('R/chunk_big_sf.R')
+source('R/warp_bfi.R')
+source('R/bfi_1km_res.R')
+source('R/locl_bfi_outs.R')
+source('R/mask_crop_terra.R')
+source('R/hack_for_bdc.R') # won't be needed soon hopefull - needed to join up with python BDC workflow.
+source('R/create_region_aois.R')
+source('R/clip_bdc_region.R')
+source('R/download_EA_waterbodies.R')
+source('R/summarise_BeavNet.R')
+source('R/save_zipped_shp.R')
 library(sf)
 library(tidyverse)
 library(purrr)
@@ -324,5 +334,19 @@ times = 1L)
 
 
 
-source('R/create_region_aois.R')
-generate_WLT_regions('SouthWest')
+
+o <- clip_bdc_region('data/regions/GB_counties.gpkg', 
+                'SouthWest', 
+                tar_read(download_EA_catchments))
+
+tar_read(SouthWest_BDC_ouputs)
+library(here)
+source('R/render_regional_report.R')
+render_regional_report(normalizePath("R/regional_tech_report.Rmd"),
+                       region='South-East', 
+                           beavNet=file.path(here(), 'bfi_out/SouthEast_Out/BeaverNetwork_SouthEast.gpkg'), 
+                           CountySumm=file.path(here(), 'bfi_out/SouthEast_Out/BeavNet_CountySumm_SouthEast.gpkg'), 
+                           WatBods= file.path(here(), 'bfi_out/SouthEast_Out/BeavNet_EA_WaterBods_SouthEast.gpkg'), 
+                           BHI ="C:/HG_Projects/BeaverNetwork-GB/bfi_out/SouthEast_Out/bhi_SouthEast.tif",
+                       BHI1km = file.path(here(), 'bfi_out/SouthEast_Out/bhi_1km_SouthEast.tif'),
+                           out_dir=file.path(here::here(),'test_reports'))

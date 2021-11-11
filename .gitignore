@@ -48,6 +48,8 @@ bfi_out/
 data/
 bdc_out/
 gdalwmscache/
+bdc_data_from_py/
+junk/
 
 #QGIS project files
 QGIS/

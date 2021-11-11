@@ -1,0 +1,344 @@
+---
+title: "OpenBeaverNetwork and Beaver Habitat Index"
+# subtitle: "Data summary report "
+author: | 
+  | Hugh A. Graham, Alan Puttock, Richard E. Brazier
+  | *Centre for Resilience in Environment, Water and Waste (CREWW), Geography, College of Life and  Environmental Sciences, University of Exeter, Exeter, UK*
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+fontfamily: mathpazo
+fontsize: 11pt
+urlcolor: blue
+header-includes:
+  - \usepackage{fancyhdr}
+  - \usepackage{booktabs}
+  - \usepackage{longtable}
+  - \usepackage{array}
+  - \usepackage{multirow}
+  - \usepackage{wrapfig}
+  - \usepackage{float}
+  - \usepackage{colortbl}
+  - \usepackage{pdflscape}
+  - \usepackage{tabu}
+  - \usepackage{threeparttable}
+  - \usepackage{threeparttablex}
+  - \usepackage[normalem]{ulem}
+  - \usepackage{makecell}
+  - \usepackage{xcolor}
+  - \usepackage{titling}
+  - \pretitle{\begin{flushleft}\fontsize{18bp}{18bp}\selectfont}
+  - \posttitle{\end{flushleft}}
+  - \preauthor{\begin{flushleft}\fontsize{13bp}{13bp}\selectfont}
+  - \postauthor{\end{flushleft}}
+  - \fancypagestyle{firststyle}{}
+bibliography: references.bib
+params: 
+    set_region: "REGION"
+    set_beavNet: "BEAVNET"
+    set_CountySumm: "Csum"
+    set_WatBods: "WATBODS"
+    set_BHI: "BHI"
+    set_BHI1km: "BHI1km"
+    set_file_ab: "FILEAB"
+    set_leg_pos: "leg_pos"
+    set_biv_leg: "biv_leg"
+subtitle: "Data summary report - `r params$set_region`"
+---
+
+```{=tex}
+\thispagestyle{firststyle}
+\lhead{\includegraphics[height=1.2cm]{C:/HG_Projects/BeaverNetwork-GB/extras/logos/CREWW_logo.png}} 
+\rhead{\includegraphics[height=1.2cm]{C:/HG_Projects/BeaverNetwork-GB/extras/logos/logo.png}}
+```
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(sf)
+library(tmap)
+library(stars)
+library(maptiles)
+library(tidyr)
+library(here)
+library(dplyr)
+library(kableExtra)
+source(file.path(here(), 'R', 'report_table_functions.R'))
+source(file.path(here(), 'R',"bivariate_tmap.R"))
+```
+
+```{r Load Data, include=FALSE}
+bdc <- read_sf(params$set_beavNet)
+bdc_join <- read_sf(params$set_CountySumm)
+bdc_WBs <- read_sf(params$set_WatBods)
+
+bhi <- stars::read_stars(params$set_BHI)
+
+bhi1k <- stars::read_stars(params$set_BHI1km)
+
+bdc_osm <- get_tiles(st_buffer(bdc_join, 10000), crop = TRUE, zoom = 9, 
+                     provider=  "Stamen.TerrainBackground",
+                     apikey = '6b63726a1a684ed986f42097f8b3e00c')
+```
+
+## Introduction
+
+This document accompanies the OpenBeaverNetwork (OBN) and Beaver Habitat Index (BHI) datasets for the `r params$set_region` region of England which have been provided to the Wildlife Trust in partnership with the University of Exeter (UoE). Also included are summary statistics (as polygon spatial vector) of the OBN for each `r params$set_region` county, as defined by the [Office for National Statistics](https://geoportal.statistics.gov.uk/datasets/6638c31a8e9842f98a037748f72258ed_0/explore?location=54.650000%2C-3.250000%2C5.81), and for Environment Agency (EA) [Water Body areas](https://environment.data.gov.uk/catchment-planning). The purpose of this document is to briefly outline modelling methods and to describe the structure and contents of the data to enable interrogation and interpretation by Wildlife Trust colleagues. These data are derived from open source products and are therefore free to share with acknowledgement of @graham2020.
+
+## Dataset Inventory
+
+Data has been provided in the file titled 'OpenBeaverNetwork`r params$set_file_ab`.zip'. It contains six files/subdirectories which are described in Table 1. All datasets are spatial and projected in OSGB36 (EPSG:27700) coordinate reference system.
+
+&nbsp;
+
+*Table 1:The name and contents of the data folders located in 'OpenBeaverNetwork`r params$set_file_ab`.zip'*
+
+```{r Data inventory tab, echo=FALSE, warning=FALSE,message=FALSE,error=FALSE,fig.keep='all' }
+Data_inv(params$set_file_ab)
+```
+
+## Beaver Habitat Index (BHI)
+
+Vegetation is important for classifying beaver habitat [@hartman1996; @john2010; @pinto2009; @st-pierre2017]. It was therefore critical to establish a reliable Beaver HabitatIndex (BHI) using nationally-available spatial datasets. No single dataset contained the detail required to depict all key vegetation types. Therefore, a composite dataset was created from:
+
+-   The Centre for Ecology and Hydrology (CEH) 2019 land cover map (LCM) [@morton2020] . This provides landcover classification at a resolution of 20m, derived from Sentinel 2 data using a random forest method. This dataset has been updated from the 2015 landcover map, used in our previous modelling work [@graham2020].
+
+-   Copernicus 2018 10 m tree cover density (TCD) [@copernicus2020] provides a percent tree cover density estimate which is derived from sentinel 2A + B satellite imagery using a random forest classification system. This dataset has been updated from the Copernicus TCD 2015, used in prior modelling work.
+
+-   The National Forest Inventory (NFI) Woodland Map [@forestrycommission2019] which includes woodland areas with an area \> 0.5 ha and a minimum width \> 20m. It is a partially derived from digitised Ordnance Survey (OS) MasterMap data but also includes additional woodland areas identified from other remotely sensed data sources.
+
+-   The (OS) VectorMap District [@ordnancesurvey2021] is a digitised spatial vector product, from which we extract the surface water areas, which include larger river channels (c.a. \>4 m wide) and still water bodies. This dataset and the NFI replaces the OS VectorMap Local data used in Graham et al., (2020).
+
+Vegetation datasets were assigned suitability values (zero to five). Zero values were assigned to areas of no vegetation e.g., buildings and values of five were assigned to favourable habitat e.g. deciduous woodland. Values were assigned based on a review of relevant literature [@gallant2004; @haarberg2006; @jenkins1979; @nolet1994; @oconnell2008], field observation and comparison with satellite imagery. Vector data were converted to raster format (resolution of 10 m). TCD data were warped (using cubic-spline transformation) from coordinate reference system (CRS) EPSG:3035 to EPSG:27700 to align with converted vector layers. An inference system was used to combine these raster datasets to create the Beaver Forge Index (BHI) [@graham2020]. The workflow prioritises the reliability followed by the highest value data. Examples of highly suitable land (graded 5) include broad-leaf woodland, mixed woodland and shrub; examples of suitable vegetation (graded 4) include shrub and marsh; examples of moderately suitable (graded 3) include coniferous woodland, shrub and unimproved grassland; examples of barely suitable (graded 2) include reeds, shrub and heathland and boulders, neutral grassland; examples of unsuitable (graded 1) include heather, acid grassland, unimproved grass and boulders, bog; examples of no accessible vegetation (graded 0) include shingle and sand, buildings, rock, urban, freshwater and saltwater.
+
+Whilst vegetation is a dominant factor in determining habitat suitability for beaver, so is proximity to a water body [@gurnell1998] . Beavers use water bodies both for security and to access foraging areas. It is thought that most foraging occurs within 10 m of a watercourse/body (Haarberg and Rosell, 2006), and rarely above 50 m [@stringer2018] . However, greater foraging distances have, on occasion, been observed [@macfarlane2017] and 100 m has been accepted as a maximum distance in which the vast majority of foraging occurs. Therefore, areas \>100m from a river bank or still waterbody were classified as No Data (NA) due to its inaccessibility.
+
+&nbsp;
+
+*Table 2: provides definitions for the BHI values. A value of five represents vegetation that is highly suitable or preferred by beavers and that also lies within 100 m of a waterbody. Zero scores are given to areas that contain no vegetation or are greater than 100 m from a waterbody. It is important to note that the model considers terrestrial habitat, where foraging primarily occurs, and therefore watercourses themselves are also scored zero.*
+
+```{r BHI value descriptions,  echo=FALSE, warning=FALSE,message=FALSE,error=FALSE,fig.keep='all' }
+
+bfi_defs()
+
+```
+
+```{r Beaver Habitat Index, echo=FALSE, warning=FALSE,message=FALSE,error=FALSE, results='hide',fig.keep='all'}
+
+tm_shape(bdc_osm, bbox=st_bbox(bdc))+
+  tm_rgb(alpha=0.4,legend.show = FALSE)+
+tm_shape(bhi) +
+  tm_raster(palette='YlGnBu',
+            labels = c('Unsuitable: <=1', 'Barely: 2','Moderate: 3', 
+                       'Suitable: 4', 'Highly Suitable: 5'),
+            title = 'Beaver Forage Index') +
+  tm_compass(position=c("right", "top")) +
+  tm_scale_bar(position=c("right", "bottom"))+
+  tm_layout(legend.title.fontfamily='serif',
+            legend.text.fontfamily='serif',
+            legend.title.size = 0.8,
+            legend.position = params$set_leg_pos)
+```
+
+*Figure 1: Beaver Habitat Index (BHI) full resolution (10 m). Ranges from 0-5 describing the suitability of forage within 100 m of inland water (i.e. rivers and lakes).*
+
+&nbsp;
+
+The BHI has a resolution of 10 m. Therefore at a large scale, as shown in Figure 1, it can be hard to interpret. Therefore we also provide the BHI at a resampled resolution of 1km (Figure2). This aids interpretation at the regional/national scale.
+
+```{r Beaver Habitat Index 1km, echo=FALSE, warning=FALSE,message=FALSE,error=FALSE, results='hide',fig.keep='all'}
+
+tm_shape(bdc_osm, bbox=st_bbox(bdc))+
+  tm_rgb(alpha=0.4,legend.show = FALSE)+
+tm_shape(bhi1k) +
+  tm_raster(palette='YlGnBu', alpha=0.7,
+            labels = c('Unsuitable: <=1', 'Barely: 2','Moderate: 3', 
+                       'Suitable: 4', 'Highly Suitable: 5'),
+            title = 'Beaver Forage Index (1km)') +
+  tm_compass(position=c("right", "top")) +
+  tm_scale_bar(position=c("right", "bottom"))+
+  tm_layout(legend.title.fontfamily='serif',
+            legend.text.fontfamily='serif',
+            legend.title.size = 0.8,
+            legend.position = params$set_leg_pos)
+```
+
+*Figure 2: Beaver Habitat Index (BHI) resampled to 1 km resolution . Ranges from 0-5...}*
+
+## Beaver Dam Capacity
+
+Beavers are well known as ecosystem engineers [@gurney1996; @hartman2006] due to their ability to build dams, construct lodges, fell trees, excavate canals and burrow into banks. Of these behaviours, it is dam construction that has the most pronounced effect on the surrounding landscape by impounding water behind the structures which often results in the formation of complex and diverse wetland systems. Beavers construct dams for two main reasons: (i) to increase the depth of water surrounding a dwelling, such as a lodge or burrow, in order to submerge the entrance (Gurnell, 1998) and (ii) to increase the ease of movement within a territory to access areas of desirable vegetation and evade predators [@campbell-palmer2016].
+
+The construction of beaver dams can help to restore natural function within riverine and riparian systems by: (i) attenuating peak flood flows and extending lag times by increasing storage capacity and surface roughness[@nyssen2011; @puttock2017; @puttock2021]; (ii) maintaining base flow by storing water during dry periods and raising local ground water tables @gibson2014; (iii) capturing fine sediment and storing nutrients[@butler1995; @devisscher2014; @lizarralde1996; @puttock2018]; (iv) aggrading incised channels, promoting floodplain reconnection[@pollock2014] and enhancing channel complexity [@john2004]; (v) increasing habitat heterogeneity and biodiversity [@law2016; @stringer2016].
+
+Although beavers offer some promising benefits, from an ecosystem service perspective, their industrious behaviour can also cause considerable conflict where valuable infrastructure or farmland is impacted [@schwab2003]. Many of these conflicts can be rectified or managed in such a way that minimises damage whilst ensuring the welfare of the animals (Campbell-Palmer et al., 2016). An understanding of where dams are likely to be constructed is important for the effective management of these conflicts, especially in the context of GB where Beaver populations are expanding.
+
+The Beaver restoration assessment tool (BRAT) was developed in North America (Macfarlane et al., 2017) to determine the capacity for river systems to support Beaver dams. The BRAT model has been further deployed in a range of different river systems to aid both Beaver recolonisation and beaver dam analogue led restoration. The BRAT model not only provides an invaluable tool for designing effective, empirically based, restoration strategies but it also indicates where Beaver dams might be constructed and therefore where they may cause potential management/conflict issues. The BRAT model is structured around a river network, calculating a range of environmental factors for each reach which are evaluated using fuzzy logic which factors in the considerable uncertainty that is associated with beaver habitat/dam suitability. Furthermore, it provides a range of output values to predict the dam capacity which has implications for beaver preference towards a given location.
+
+We have therefore used the BRAT framework to develop an optimised beaver dam capacity (BDC) model for Great Britain [@graham2020]. The model infers the density of dams that can be supported by stream reaches (110 m ± 50 SD) across a catchsment. Using low-cost and open-source datasets, the following attributes are calculated for each reach: (i) stream gradient, (ii) low (Q80) and high flow (Q2) stream power, (iii) bankfull width, (iv) stream order, and (v) the suitability of vegetation, within 10m and 40m of the bank, for beaver dam construction. These controlling variables are combined using a sequence of inference and fuzzy inference systems which follow an expert-defined rules system that allows for the considerable uncertainty often associated with these types of complex ecological processes.
+
+Each reach was classified for dam capacity using five categories from none, defined as no capacity for damming to pervasive where a maximum capacity of 16-30 dams could theoretically be constructed in a km of channel. It is important to note that the model assumes both reach and catchment population carrying capacity for beaver. Therefore, in reality the maximum number of dams indicated in a category class is unlikely to occur. A full list of BDC classifications is included in Table 2.
+
+&nbsp;
+
+*Table 2: BDC classifications and definitions.*
+
+```{r BDC value descriptions,  echo=FALSE, warning=FALSE,message=FALSE,error=FALSE,fig.keep='all' }
+
+bdc_class()
+
+```
+
+## BeaverNetwork-`r params$set_region`
+
+The BeaverNetwork-`r params$set_file_ab` model provides a synthesis of both the BHI and BDC models. For each reach there are therefore estimates for the forage suitability within 10 and 40m of the river bank and the dam capacity for the reach. In addition to these data, information for the probability of forage and dam construction and the number of dams which is estimated for the reach (including confidence limits) based on observed foraging/dam building behaviour as demonstrated in Graham, et al. (2020). The probability of forage/dam construction was calculated using binomial Bayesian modelling and dam number estimates were calculated using regression analysis (zero-inflated negative binomial model). Predictions for reach scale dam counts should only be considered as a sum at the (sub) catchment scale (\>= 5km^2^).
+
+```{r BeaverNetwork, echo=FALSE, warning=FALSE,message=FALSE,error=FALSE, results='hide',fig.keep='all'}
+
+tm_shape(bdc_osm, bbox=st_bbox(bdc))+
+  tm_rgb(alpha=0.4,legend.show = FALSE)+
+tm_shape(bdc)+
+  tm_lines( col='BDC', lwd=0.5, 
+            style = 'fixed', breaks = c(0,0.1,1,4,15,32),
+            palette=c('black','orange','yellow','green','blue'),
+            labels = c('None: 0', 'Rare: 0-1','Occasional: 1-4', 
+                       'Frequent: 4-15', 'Pervasive: 15-30'),
+            title.col = 'Beaver Dam Capaity (dams/km)')+
+  tm_compass(position=c("right", "top")) +
+  tm_scale_bar(position=c("right", "bottom"))+
+  tm_layout(legend.title.fontfamily='serif',
+            legend.text.fontfamily='serif',
+            legend.title.size = 0.8,
+            legend.position = params$set_leg_pos)
+
+```
+
+*Figure3: BeaverNetwork-`r params$set_file_ab` displaying Beaver Dam Capacity data for all reaches.*
+
+&nbsp;
+
+*Table 3: Description of variables provided int the OpenBeaverNetwork-`r params$set_file_ab` dataset.*
+
+```{r BDC variable table,  echo=FALSE, warning=FALSE,message=FALSE,error=FALSE,fig.keep='all'}
+
+bdc_data_table()
+
+```
+
+## Regional summary statistics
+
+A range of summary statistics were calculated at two different scales (county and EA Water Body Area) by carrying out a spatial join between the BeaverNetwork features and the regional polygons. A range of summary statistics, described in Table 4, were derived to provide regional understanding. A selection of these summary statistics are presented as a facet plot in Figures 4 and 5 and as bivariate choropleth maps in figures 6 and 7.
+
+```{r County summary, echo=FALSE, warning=FALSE,message=FALSE,error=FALSE, results='hide',fig.keep='all'}
+
+bdc_LongJ <- bdc_join %>%
+  select(county, BDC_MEAN, BDC_P_PERV , BFI40_P_PR, Est_DamD) %>%
+  pivot_longer(c('BDC_MEAN', 'BDC_P_PERV' , 'BFI40_P_PR', 'Est_DamD'))
+
+tmap_facet <- function(bdc_sum, type='polygons') {
+  tmap_base <- tm_shape(bdc_osm, bbox=st_bbox(bdc))+
+    tm_rgb(alpha=0.3,legend.show = FALSE)
+  
+  if (type=='polygons'){
+    tmap_base <- tmap_base +
+      tm_shape(bdc_sum) +
+      tm_polygons(col='value', pal='viridis', alpha=0.7,title = "")
+  } else if (type=='fill'){
+    tmap_base <- tmap_base +
+      tm_shape(bdc_sum) +
+      tm_fill(col='value', pal='viridis', alpha=0.7,title = "", showNA=F)
+  }
+  tmap_base <- tmap_base + 
+    tm_facets(by="name", free.scales=T) +
+    tm_layout(panel.show = TRUE,
+            panel.labels = c("mean BDC (dams/km)", "% Pervasive Dam Capacity", 
+                             "% Preferred Habitat", 
+                             'Estimated Dam Density(dams/km)'),
+            legend.title.fontfamily='serif',
+            legend.text.fontfamily='serif',
+            panel.label.fontfamily='serif',
+            legend.position = params$set_leg_pos)#+
+  # tm_compass(position=c("right", "top")) +
+  # tm_scale_bar(position=c("right", "bottom"))
+  
+  return(tmap_base)
+  
+}
+tmap_facet(bdc_LongJ)
+
+```
+
+*Figure 4: Summary satatistics for `r params$set_region` Counties. This figures serves as an example for the types of satistics that can be derived for regions.*
+
+```{r WaterBod summary, echo=FALSE, warning=FALSE,message=FALSE,error=FALSE, results='hide',fig.keep='all'}
+
+bdcWB_LongJ <- bdc_WBs %>%
+  select(BDC_MEAN, BDC_P_PERV , BFI40_P_PR, Est_DamD) %>%
+  mutate(Est_DamD = ifelse(Est_DamD>2, 2, Est_DamD)) %>%
+  pivot_longer(c('BDC_MEAN', 'BDC_P_PERV' , 'BFI40_P_PR', 'Est_DamD'))
+  
+  tmap_facet(bdcWB_LongJ, type='fill')
+
+
+```
+
+*Figure 5: Summary satatistics for `r params$set_region` EA Water Body Areas.*
+
+&nbsp;
+
+Figures 4-7 serve as examples of how this data may be used to evaluate the data in a regionalised manner. Each facet in figures 4 and 5 represent a single summarised variable from the OBN. However, we can also select or prioritise different regions for beaver reintroduction or management based on the interaction of multiple factors. Figures 6 and 7 compare the estimated dam density (under carrying capacity) with the proportion of the river network with preferred forage (within 40 m of the bank). Here, we can make inferences on how landuse and topographic differences in regions can influence the potential imapact of beavers.
+
+```{r Bivariate Map, echo=FALSE, warning=FALSE,message=FALSE,error=FALSE, results='hide',fig.keep='all' }
+# Import function
+
+ 
+bdc_joinSP <- as(bdc_join, "Spatial")
+
+# Option 1
+# Plot bivariate choroplet map (including legend)
+
+bivariate_choropleth(bdc_joinSP, c("Est_DamD", "BFI40_P_PR"),
+                     basemap=bdc_osm, bm_alpha=0.7, bivmap_scale=T, 
+                     bivmap_labels=c('Potential dam density', 'Habitat Suitability'),
+                     poly_alpha=0.9, scale_pos = c('right', 'bottom'),
+                     leg_pos=params$set_biv_leg) 
+```
+
+*Figure 6: Bivariate map comparing habitat suitability (% preferred Habitat) and potential dam density (The estimated density of dams at population capacity) for `r params$set_region` counties*
+
+```{r Bivariate Map2, echo=FALSE, warning=FALSE,message=FALSE,error=FALSE, results='hide',fig.keep='all' }
+# Import function
+
+bdcWB_joinSP <- as(bdc_WBs, "Spatial")
+
+# Option 1
+# Plot bivariate choroplet map (including legend)
+
+bivariate_choropleth(bdcWB_joinSP, c("Est_DamD", "BFI40_P_PR"),
+                     basemap=bdc_osm, bm_alpha=0.7, bivmap_scale=T, 
+                     bivmap_labels=c('Potential dam density', 'Habitat Suitability'),
+                     poly_alpha=0.9, scale_pos = c('right', 'bottom'),
+                     leg_pos=params$set_biv_leg) 
+```
+
+*Figure 7: Bivariate map comparing habitat suitability (% preferred Habitat) and potential dam density (The estimated density of dams at population capacity) for EA Water Body areas.*
+
+&nbsp;
+
+*Table 4: Description of variables provided with the county summary polygon file*
+
+```{r Conty summary stats variable table,  echo=FALSE, warning=FALSE,message=FALSE,error=FALSE,fig.keep='all'}
+
+
+SummaryVarsTable()
+
+```
+
+::: {style="page-break-after: always; visibility: hidden"}
+\pagebreak
+:::
+
+## Reference List
+
+::: {style="foot-note-size: always; visibility: hidden"}
+\footnotesize
+:::

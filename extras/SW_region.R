@@ -82,7 +82,7 @@ rbds_poly <- rbds %>%
   filter(.,st_is(.,c("POLYGON", "MULTIPOLYGON"))) %>%
   filter(st_intersects(., st_union(bdc_join), sparse = FALSE)[,1]) %>%
   filter(! water.body.type %in% c( "{ \"string\": \"Coastal Water\", \"lang\": \"en\" }",
-                                   "{ \"string\": \"Groundwater Body\", \"lang\": \"en\" }" ))
+                                   "{ \"string\": \"Groundwater Body\", \"lang\": \"en\" }" )) %>%
 filter(water.body.type %in% c("{ \"string\": \"River\", \"lang\": \"en\" }",
                               "{ \"string\": \"Transitional Water\", \"lang\": \"en\" }"))
 

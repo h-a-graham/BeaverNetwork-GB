@@ -8,10 +8,10 @@ library(targets)
 # 
 # tar_glimpse() 
 
-tar_visnetwork(label='time', level_separation=300)
+tar_visnetwork(label='time', level_separation=500)
 
 
-tar_make() # run the targets workflow
+# tar_make() # run the targets workflow
 # tar_make(callr_function = NULL) # for debugging
 targets::tar_make_future(workers = 6L) # not using this anymore.
 
