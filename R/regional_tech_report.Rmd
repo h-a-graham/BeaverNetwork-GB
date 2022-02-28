@@ -44,6 +44,7 @@ params:
     set_file_ab: "FILEAB"
     set_leg_pos: "leg_pos"
     set_biv_leg: "biv_leg"
+    set_WB_names: "WB_names"
 subtitle: "Data summary report - `r params$set_region`"
 ---
 
@@ -82,7 +83,8 @@ bdc_osm <- get_tiles(st_buffer(bdc_join, 10000), crop = TRUE, zoom = 9,
 
 ## Introduction
 
-This document accompanies the OpenBeaverNetwork (OBN) and Beaver Habitat Index (BHI) datasets for the `r params$set_region` region of England which have been provided to the Wildlife Trust in partnership with the University of Exeter (UoE). Also included are summary statistics (as polygon spatial vector) of the OBN for each `r params$set_region` county, as defined by the [Office for National Statistics](https://geoportal.statistics.gov.uk/datasets/6638c31a8e9842f98a037748f72258ed_0/explore?location=54.650000%2C-3.250000%2C5.81), and for Environment Agency (EA) [Water Body areas](https://environment.data.gov.uk/catchment-planning). The purpose of this document is to briefly outline modelling methods and to describe the structure and contents of the data to enable interrogation and interpretation by Wildlife Trust colleagues. These data are derived from open source products and are therefore free to share with acknowledgement of @graham2020.
+This document accompanies the OpenBeaverNetwork (OBN) and Beaver Habitat Index (BHI) datasets for the `r params$set_region` region of England which have been provided to the Wildlife Trust in partnership with the University of Exeter (UoE). Also included are summary statistics (as polygon spatial vector) of the OBN for each `r params$set_region` county, as defined by the [Office for National Statistics](https://geoportal.statistics.gov.uk/datasets/6638c31a8e9842f98a037748f72258ed_0/explore?location=54.650000%2C-3.250000%2C5.81), and for `r if (params$set_WB_names=="EA Water Body") "Environment Agency (EA)[Water Body Areas](https://environment.data.gov.uk/catchment-planning)" else if (params$set_WB_names=="NRW WFD Water Body") "National Resources Wales (NRW) Water Framework Directive (WFD) [Water Body Areas](https://lle.gov.wales/catalogue/item/WaterFrameworkDirectiveRiverCatchmentWaterbodiesCycle2/?lang=en)"`
+. The purpose of this document is to briefly outline modelling methods and to describe the structure and contents of the data to enable interrogation and interpretation by Wildlife Trust colleagues. These data are derived from open source products and are therefore free to share with acknowledgement of @graham2020.
 
 ## Dataset Inventory
 
@@ -93,7 +95,7 @@ Data has been provided in the file titled 'OpenBeaverNetwork`r params$set_file_a
 *Table 1:The name and contents of the data folders located in 'OpenBeaverNetwork`r params$set_file_ab`.zip'*
 
 ```{r Data inventory tab, echo=FALSE, warning=FALSE,message=FALSE,error=FALSE,fig.keep='all' }
-Data_inv(params$set_file_ab)
+Data_inv(params$set_file_ab, params$set_WB_names)
 ```
 
 ## Beaver Habitat Index (BHI)
@@ -226,7 +228,7 @@ bdc_data_table()
 
 ## Regional summary statistics
 
-A range of summary statistics were calculated at two different scales (county and EA Water Body Area) by carrying out a spatial join between the BeaverNetwork features and the regional polygons. A range of summary statistics, described in Table 4, were derived to provide regional understanding. A selection of these summary statistics are presented as a facet plot in Figures 4 and 5 and as bivariate choropleth maps in figures 6 and 7.
+A range of summary statistics were calculated at two different scales (county and `r params$set_WB_names` Area) by carrying out a spatial join between the BeaverNetwork features and the regional polygons. A range of summary statistics, described in Table 4, were derived to provide regional understanding. A selection of these summary statistics are presented as a facet plot in Figures 4 and 5 and as bivariate choropleth maps in figures 6 and 7.
 
 ```{r County summary, echo=FALSE, warning=FALSE,message=FALSE,error=FALSE, results='hide',fig.keep='all'}
 
@@ -281,7 +283,7 @@ bdcWB_LongJ <- bdc_WBs %>%
 
 ```
 
-*Figure 5: Summary satatistics for `r params$set_region` EA Water Body Areas.*
+*Figure 5: Summary satatistics for `r params$set_region` `r params$set_WB_names` Areas.*
 
 &nbsp;
 
@@ -320,7 +322,7 @@ bivariate_choropleth(bdcWB_joinSP, c("Est_DamD", "BFI40_P_PR"),
                      leg_pos=params$set_biv_leg) 
 ```
 
-*Figure 7: Bivariate map comparing habitat suitability (% preferred Habitat) and potential dam density (The estimated density of dams at population capacity) for EA Water Body areas.*
+*Figure 7: Bivariate map comparing habitat suitability (% preferred Habitat) and potential dam density (The estimated density of dams at population capacity) for `r params$set_WB_names` areas.*
 
 &nbsp;
 

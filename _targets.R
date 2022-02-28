@@ -17,13 +17,14 @@ source('R/warp_bfi.R')
 source('R/bfi_1km_res.R')
 source('R/locl_bfi_outs.R')
 source('R/mask_crop_terra.R')
-source('R/hack_for_bdc.R') # won't be needed soon hopefull - needed to join up with python BDC workflow.
+source('R/hack_for_bdc.R') # won't be needed soon hopefully - needed to join up with python BDC workflow.
 source('R/create_region_aois.R')
 source('R/clip_bdc_region.R')
 source('R/download_EA_waterbodies.R')
 source('R/summarise_BeavNet.R')
 source('R/save_zipped_shp.R')
 source('R/render_regional_report.R')
+source('R/download_NRW_WFD_mgmt.R')
 future::plan(future::multisession, workers = 4)
 # ==== target options ====
 options(tidyverse.quiet = TRUE)
@@ -76,6 +77,9 @@ list(
   # Download EA water body areas for summary stats at the end.
   tar_target(download_EA_catchments,
              download_EA_waterbodies()),
+  # Download NRW WFD Management Catchments for summary stats at the end.
+  tar_target(download_NRW_catchments,
+             download_NRW_WFD_mgmt()),
   # mosaic and warp TCD data
   tar_target(mosaic_tcd, 
              warp_tcd(cop_tcd18, inter_data_dir)),
@@ -146,7 +150,8 @@ list(
   tar_target(North_BDC_ouputs,
              clip_bdc_region(GBCounty, 'North', download_EA_catchments)),
   tar_target(Wales_BDC_ouputs,
-             clip_bdc_region(GBCounty, 'Wales', download_EA_catchments)),
+             clip_bdc_region(GBCounty, 'Wales', download_NRW_catchments,
+                             country='Wales')),
   tar_target(Cornwall_BDC_ouputs,
              clip_bdc_region(GBCounty, 'Cornwall', download_EA_catchments)),
   tar_target(SouthWestReport,
@@ -154,7 +159,7 @@ list(
                                     region='South-West', 
                                     beavNet=toString(SouthWest_BDC_ouputs$bdcnet), 
                                     CountySumm=toString(SouthWest_BDC_ouputs$countysum), 
-                                    WatBods= toString(SouthWest_BDC_ouputs$ea_watbods), 
+                                    WatBods= toString(SouthWest_BDC_ouputs$watbods), 
                                     BHI = toString(SouthWest_BHI_ouputs$localBHI),
                                     BHI1km = toString(SouthWest_BHI_ouputs$local1kmBHI),
                                     out_dir=dirname(toString(SouthWest_BHI_ouputs$localBHI)),
@@ -166,7 +171,7 @@ list(
                                     region='South-East', 
                                     beavNet=toString(SouthEast_BDC_ouputs$bdcnet), 
                                     CountySumm=toString(SouthEast_BDC_ouputs$countysum), 
-                                    WatBods= toString(SouthEast_BDC_ouputs$ea_watbods), 
+                                    WatBods= toString(SouthEast_BDC_ouputs$watbods), 
                                     BHI = toString(SouthEast_BHI_ouputs$localBHI),
                                     BHI1km = toString(SouthEast_BHI_ouputs$local1kmBHI),
                                     out_dir=dirname(toString(SouthEast_BHI_ouputs$localBHI)),
@@ -178,19 +183,20 @@ list(
                                     region='Wales', 
                                     beavNet=toString(Wales_BDC_ouputs$bdcnet), 
                                     CountySumm=toString(Wales_BDC_ouputs$countysum), 
-                                    WatBods= toString(Wales_BDC_ouputs$ea_watbods), 
+                                    WatBods= toString(Wales_BDC_ouputs$watbods), 
                                     BHI = toString(Wales_BHI_ouputs$localBHI),
                                     BHI1km = toString(Wales_BHI_ouputs$local1kmBHI),
                                     out_dir=dirname(toString(Wales_BHI_ouputs$localBHI)),
                                     file_ab='Wales', 
                                     scale_pos=c("left", "top"),
-                                    biv_leg = c(0.1, 0.85))),
+                                    biv_leg = c(0.3, 0.85),
+                                    WB_names= 'NRW WFD Water Body')),
   tar_target(MidlandsReport,
              render_regional_report(normalizePath("R/regional_tech_report.Rmd"),
                                     region='Midlands', 
                                     beavNet=toString(Midlands_BDC_ouputs$bdcnet), 
                                     CountySumm=toString(Midlands_BDC_ouputs$countysum), 
-                                    WatBods= toString(Midlands_BDC_ouputs$ea_watbods), 
+                                    WatBods= toString(Midlands_BDC_ouputs$watbods), 
                                     BHI = toString(Midlands_BHI_ouputs$localBHI),
                                     BHI1km = toString(Midlands_BHI_ouputs$local1kmBHI),
                                     out_dir=dirname(toString(Midlands_BHI_ouputs$localBHI)),
@@ -202,7 +208,7 @@ list(
                                     region='North',
                                     beavNet=toString(North_BDC_ouputs$bdcnet), 
                                     CountySumm=toString(North_BDC_ouputs$countysum), 
-                                    WatBods= toString(North_BDC_ouputs$ea_watbods), 
+                                    WatBods= toString(North_BDC_ouputs$watbods), 
                                     BHI = toString(North_BHI_ouputs$localBHI),
                                     BHI1km = toString(North_BHI_ouputs$local1kmBHI),
                                     out_dir=dirname(toString(North_BHI_ouputs$localBHI)),

@@ -1,5 +1,6 @@
 
-clip_bdc_region <- function(counties_gpkg, region_name, ea_watbod){
+clip_bdc_region <- function(counties_gpkg, region_name, ea_watbod, 
+                            country='England'){
   
   bdc_path <-'D:/HG_Work/GB_Beaver_Data/OpenBeaverNetwork_GB_v0_3/OpenBeaverNetwork_GB_v0_3.gpkg'
   CEH_has <- read_sf("C:/HG_Projects/Hugh_BDC_Files/GB_Beaver_modelling/CEH_catchments/GB_CEH_HAs_V2.gpkg")
@@ -45,19 +46,23 @@ clip_bdc_region <- function(counties_gpkg, region_name, ea_watbod){
                   sprintf('BeavNet_CountySumm_%s',region_name), 
                   out.dir)
   
-  ea_watbod.sf <- read_sf(ea_watbod) %>%
+  watbod.sf <- read_sf(ea_watbod) %>%
     filter(st_intersects(., st_union(counties), sparse = FALSE)[,1])
-    
-  EA_WB_summs <- summarise_BeavNet(bdc_aoi, ea_watbod.sf, "name")
-  ea_watbods_gpkg <- file.path(out.dir, 
-                               sprintf('BeavNet_EA_WaterBods_%s.gpkg',region_name))
-  st_write(EA_WB_summs, delete_dsn =T, ea_watbods_gpkg)
+  
+  catch_type <- if (country=='England') 'EA_WaterBods' else 'NRW_WFD_WaterBods'
+  grp_name <- if (country=='England') 'name' else 'WB_NAME'
+       
+  EA_WB_summs <- summarise_BeavNet(bdc_aoi, watbod.sf, grp_name)
+  watbods_gpkg <- file.path(out.dir, 
+                               sprintf('BeavNet_%s_%s.gpkg',catch_type,
+                                       region_name))
+  st_write(EA_WB_summs, delete_dsn =T, watbods_gpkg)
   
   save_zipped_shp(EA_WB_summs, 
-                  sprintf('BeavNet_EA_WaterBods_%s',region_name), 
+                  sprintf('BeavNet_%s_%s',catch_type,region_name), 
                   out.dir)
   
   return(list(bdcnet = normalizePath(bdc_out_gpkg),
               countysum = county_summs_gpkg,
-              ea_watbods = ea_watbods_gpkg))
+              watbods = watbods_gpkg))
 }

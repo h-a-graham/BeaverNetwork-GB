@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2021.11.3)  11 NOV 2021 12:50
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2021.11.3)  28 FEB 2022 12:43
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -569,24 +569,24 @@ File: l3backend-pdftex.def 2021-10-18 L3 backend support: PDF output (pdfTeX)
 ) (./reional_tech_report_Wales.aux)
 \openout1 = `reional_tech_report_Wales.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 129.
-LaTeX Font Info:    ... okay on input line 129.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 129.
-LaTeX Font Info:    ... okay on input line 129.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 129.
-LaTeX Font Info:    ... okay on input line 129.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 129.
-LaTeX Font Info:    ... okay on input line 129.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 129.
-LaTeX Font Info:    ... okay on input line 129.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 129.
-LaTeX Font Info:    ... okay on input line 129.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 129.
-LaTeX Font Info:    ... okay on input line 129.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 129.
-LaTeX Font Info:    ... okay on input line 129.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 129.
-LaTeX Font Info:    ... okay on input line 129.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 143.
+LaTeX Font Info:    ... okay on input line 143.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 143.
+LaTeX Font Info:    ... okay on input line 143.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 143.
+LaTeX Font Info:    ... okay on input line 143.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 143.
+LaTeX Font Info:    ... okay on input line 143.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 143.
+LaTeX Font Info:    ... okay on input line 143.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 143.
+LaTeX Font Info:    ... okay on input line 143.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 143.
+LaTeX Font Info:    ... okay on input line 143.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 143.
+LaTeX Font Info:    ... okay on input line 143.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 143.
+LaTeX Font Info:    ... okay on input line 143.
 
 (c:/Users/hg340/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/epstopdf-pkg/epsto
 pdf-base.sty
@@ -599,7 +599,7 @@ df-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-Package hyperref Info: Link coloring ON on input line 129.
+Package hyperref Info: Link coloring ON on input line 143.
 
 (c:/Users/hg340/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/nameref.s
 ty
@@ -615,9 +615,9 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
 \c@section@level=\count307
 )
-LaTeX Info: Redefining \ref on input line 129.
-LaTeX Info: Redefining \pageref on input line 129.
-LaTeX Info: Redefining \nameref on input line 129.
+LaTeX Info: Redefining \ref on input line 143.
+LaTeX Info: Redefining \pageref on input line 143.
+LaTeX Info: Redefining \nameref on input line 143.
 (./reional_tech_report_Wales.out) (./reional_tech_report_Wales.out)
 \@outlinefile=\write3
 \openout3 = `reional_tech_report_Wales.out'.
@@ -657,33 +657,33 @@ LaTeX Info: Redefining \nameref on input line 129.
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 
-Underfull \hbox (badness 1048) in paragraph at lines 156--160
+Underfull \hbox (badness 1048) in paragraph at lines 171--175
 \T1/ppl/m/n/10.95 Data has been pro-vided in the file ti-tled `Open-Beav-er-Net
 -work-Wales.zip'. It con-tains six
  []
 
 
-Overfull \hbox (4.24498pt too wide) in alignment at lines 168--172
+Overfull \hbox (4.24498pt too wide) in alignment at lines 183--187
  [] [] 
  []
 
 
-Overfull \hbox (4.24498pt too wide) in alignment at lines 172--177
+Overfull \hbox (4.24498pt too wide) in alignment at lines 187--192
  [] [] 
  []
 
 
-Overfull \hbox (4.24498pt too wide) in alignment at lines 177--179
+Overfull \hbox (4.24498pt too wide) in alignment at lines 192--194
  [] [] 
  []
 
 
-Overfull \hbox (4.24498pt too wide) in alignment at lines 179--181
+Overfull \hbox (4.24498pt too wide) in alignment at lines 194--196
  [] [] 
  []
 
 
-Overfull \hbox (4.24498pt too wide) in alignment at lines 181--198
+Overfull \hbox (4.24498pt too wide) in alignment at lines 196--213
  [] [] 
  []
 
@@ -693,7 +693,7 @@ File: C:/HG_Projects/BeaverNetwork-GB/extras/logos/CREWW_logo.png Graphic file
 (type png)
 <use C:/HG_Projects/BeaverNetwork-GB/extras/logos/CREWW_logo.png>
 Package pdftex.def Info: C:/HG_Projects/BeaverNetwork-GB/extras/logos/CREWW_log
-o.png  used on input line 198.
+o.png  used on input line 213.
 (pdftex.def)             Requested size: 207.23112pt x 34.14333pt.
 <C:/HG_Projects/BeaverNetwork-GB/extras/logos/logo.png, id=36, 217.5327pt x 234
 .8775pt>
@@ -701,7 +701,7 @@ File: C:/HG_Projects/BeaverNetwork-GB/extras/logos/logo.png Graphic file (type
 png)
 <use C:/HG_Projects/BeaverNetwork-GB/extras/logos/logo.png>
 Package pdftex.def Info: C:/HG_Projects/BeaverNetwork-GB/extras/logos/logo.png 
- used on input line 198.
+ used on input line 213.
 (pdftex.def)             Requested size: 31.61943pt x 34.14058pt.
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -717,7 +717,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 x.map} <c:/HG_Projects/BeaverNetwork-GB/extras/logos/CREWW_logo.png> <c:/HG_Pro
 jects/BeaverNetwork-GB/extras/logos/logo.png>]
 LaTeX Font Info:    Trying to load font information for TS1+ppl on input line 2
-13.
+28.
 (c:/Users/hg340/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/ts1ppl.fd
 File: ts1ppl.fd 2001/06/04 font definitions for TS1/ppl.
 ) [2]
@@ -729,7 +729,7 @@ es_files/figure-latex/Beaver Habitat Index-1.pdf Graphic file (type pdf)
 s_files/figure-latex/Beaver Habitat Index-1.pdf>
 Package pdftex.def Info: C:/HG_Projects/BeaverNetwork-GB/bfi_out/Wales_Out/reio
 nal_tech_report_Wales_files/figure-latex/Beaver Habitat Index-1.pdf  used on in
-put line 309.
+put line 324.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [3]
 <C:/HG_Projects/BeaverNetwork-GB/bfi_out/Wales_Out/reional_tech_report_Wales_fi
@@ -740,46 +740,46 @@ es_files/figure-latex/Beaver Habitat Index 1km-1.pdf Graphic file (type pdf)
 s_files/figure-latex/Beaver Habitat Index 1km-1.pdf>
 Package pdftex.def Info: C:/HG_Projects/BeaverNetwork-GB/bfi_out/Wales_Out/reio
 nal_tech_report_Wales_files/figure-latex/Beaver Habitat Index 1km-1.pdf  used o
-n input line 322.
+n input line 337.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [4 <c:/HG_Projects/BeaverNetwork-GB/bfi_out/Wales_Out/reional_tech_report_Wales
 _files/figure-latex/Beaver Habitat Index-1.pdf>] [5 <c:/HG_Projects/BeaverNetwo
 rk-GB/bfi_out/Wales_Out/reional_tech_report_Wales_files/figure-latex/Beaver Hab
 itat Index 1km-1.pdf>]
 LaTeX Font Info:    Trying to load font information for OT1+ppl on input line 4
-45.
+60.
 (c:/Users/hg340/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/ot1ppl.fd
 File: ot1ppl.fd 2001/06/04 font definitions for OT1/ppl.
 )
 LaTeX Font Info:    Trying to load font information for OML+zplm on input line 
-445.
+460.
 (c:/Users/hg340/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/omlzplm.fd
 File: omlzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OML/zplm.
 )
 LaTeX Font Info:    Trying to load font information for OMS+zplm on input line 
-445.
+460.
 (c:/Users/hg340/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/omszplm.fd
 File: omszplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMS/zplm.
 )
 LaTeX Font Info:    Trying to load font information for OMX+zplm on input line 
-445.
+460.
 (c:/Users/hg340/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/omxzplm.fd
 File: omxzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMX/zplm.
 )
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 11.40997pt on input line 445.
+(Font)              scaled to size 11.40997pt on input line 460.
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 8.33606pt on input line 445.
+(Font)              scaled to size 8.33606pt on input line 460.
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 6.25204pt on input line 445.
+(Font)              scaled to size 6.25204pt on input line 460.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 11.40997pt on input line 445.
+(Font)              scaled to size 11.40997pt on input line 460.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 8.33606pt on input line 445.
+(Font)              scaled to size 8.33606pt on input line 460.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 6.25204pt on input line 445.
+(Font)              scaled to size 6.25204pt on input line 460.
 LaTeX Font Info:    Trying to load font information for OT1+zplm on input line 
-445.
+460.
 (c:/Users/hg340/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/ot1zplm.fd
 File: ot1zplm.fd 2002/09/08 Fontinst v1.914 font definitions for OT1/zplm.
 ) [6]
@@ -791,7 +791,7 @@ es_files/figure-latex/BeaverNetwork-1.pdf Graphic file (type pdf)
 s_files/figure-latex/BeaverNetwork-1.pdf>
 Package pdftex.def Info: C:/HG_Projects/BeaverNetwork-GB/bfi_out/Wales_Out/reio
 nal_tech_report_Wales_files/figure-latex/BeaverNetwork-1.pdf  used on input lin
-e 447.
+e 462.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [7 <c:/HG_Projects/BeaverNetwork-GB/bfi_out/Wales_Out/reional_tech_report_Wales
 _files/figure-latex/BeaverNetwork-1.pdf>] [8]
@@ -803,7 +803,7 @@ es_files/figure-latex/County summary-1.pdf Graphic file (type pdf)
 s_files/figure-latex/County summary-1.pdf>
 Package pdftex.def Info: C:/HG_Projects/BeaverNetwork-GB/bfi_out/Wales_Out/reio
 nal_tech_report_Wales_files/figure-latex/County summary-1.pdf  used on input li
-ne 548.
+ne 563.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 <C:/HG_Projects/BeaverNetwork-GB/bfi_out/Wales_Out/reional_tech_report_Wales_fi
 les/figure-latex/WaterBod summary-1.pdf, id=122, 469.755pt x 325.215pt>
@@ -813,7 +813,7 @@ es_files/figure-latex/WaterBod summary-1.pdf Graphic file (type pdf)
 s_files/figure-latex/WaterBod summary-1.pdf>
 Package pdftex.def Info: C:/HG_Projects/BeaverNetwork-GB/bfi_out/Wales_Out/reio
 nal_tech_report_Wales_files/figure-latex/WaterBod summary-1.pdf  used on input 
-line 554.
+line 569.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [9 <c:/HG_Projects/BeaverNetwork-GB/bfi_out/Wales_Out/reional_tech_report_Wales
 _files/figure-latex/County summary-1.pdf>]
@@ -825,7 +825,7 @@ es_files/figure-latex/Bivariate Map-1.pdf Graphic file (type pdf)
 s_files/figure-latex/Bivariate Map-1.pdf>
 Package pdftex.def Info: C:/HG_Projects/BeaverNetwork-GB/bfi_out/Wales_Out/reio
 nal_tech_report_Wales_files/figure-latex/Bivariate Map-1.pdf  used on input lin
-e 570.
+e 585.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [10 <c:/HG_Projects/BeaverNetwork-GB/bfi_out/Wales_Out/reional_tech_report_Wale
 s_files/figure-latex/WaterBod summary-1.pdf>]
@@ -837,26 +837,26 @@ es_files/figure-latex/Bivariate Map2-1.pdf Graphic file (type pdf)
 s_files/figure-latex/Bivariate Map2-1.pdf>
 Package pdftex.def Info: C:/HG_Projects/BeaverNetwork-GB/bfi_out/Wales_Out/reio
 nal_tech_report_Wales_files/figure-latex/Bivariate Map2-1.pdf  used on input li
-ne 576.
+ne 591.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [11 <c:/HG_Projects/BeaverNetwork-GB/bfi_out/Wales_Out/reional_tech_report_Wale
 s_files/figure-latex/Bivariate Map-1.pdf>] [12 <c:/HG_Projects/BeaverNetwork-GB
 /bfi_out/Wales_Out/reional_tech_report_Wales_files/figure-latex/Bivariate Map2-
 1.pdf>] [13] [14]
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 9.37807pt on input line 654.
+(Font)              scaled to size 9.37807pt on input line 669.
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 7.29405pt on input line 654.
+(Font)              scaled to size 7.29405pt on input line 669.
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 5.21004pt on input line 654.
+(Font)              scaled to size 5.21004pt on input line 669.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 9.37807pt on input line 654.
+(Font)              scaled to size 9.37807pt on input line 669.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 7.29405pt on input line 654.
+(Font)              scaled to size 7.29405pt on input line 669.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 5.21004pt on input line 654.
+(Font)              scaled to size 5.21004pt on input line 669.
 [15]
-Underfull \hbox (badness 10000) in paragraph at lines 784--790
+Underfull \hbox (badness 10000) in paragraph at lines 799--805
 [][]$\T1/ppl/m/n/9 http : / / www . conservationandsociety . org / article . as
 p ? issn = 0972 -[] 4923 ; year = 2008 ; volume = 6 ; issue = 2 ; spage = 190 ;
 
@@ -880,7 +880,7 @@ c}<c:/Users/hg340/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/palatino/u
 plb8a.pfb><c:/Users/hg340/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/pa
 latino/uplr8a.pfb><c:/Users/hg340/AppData/Roaming/TinyTeX/texmf-dist/fonts/type
 1/urw/palatino/uplri8a.pfb>
-Output written on reional_tech_report_Wales.pdf (16 pages, 16036474 bytes).
+Output written on reional_tech_report_Wales.pdf (16 pages, 32094717 bytes).
 PDF statistics:
  333 PDF objects out of 1000 (max. 8388607)
  258 compressed objects within 3 object streams

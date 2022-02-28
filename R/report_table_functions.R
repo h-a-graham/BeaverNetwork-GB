@@ -235,14 +235,16 @@ bdc_class <- function(){
 }
 
 
-Data_inv <- function(name){
+Data_inv <- function(name, waterbod_name){
+  wb_name <- if (waterbod_name=='EA Water Body') 'EA_WaterBods' else 'NRW_WFD_WaterBods'
+  
   dat_inv <- tibble(`Folder/File Name` = c(
     sprintf("BeaverNetwork_%s.gpkg", name),
     sprintf("BeaverNetwork_%s.zip", name),
     sprintf("BeavNet_CountySumm_%s.gpkg", name),
     sprintf("BeavNet_CountySumm_%st.zip", name),
-    sprintf("BeavNet_EA_WaterBods_%s.gpkg", name),
-    sprintf("BeavNet_EA_WaterBods_%s.zip", name),
+    sprintf("BeavNet_%s_%s.gpkg", wb_name, name),
+    sprintf("BeavNet_%s_%s.zip",wb_name, name),
     sprintf("bhi_%s.tif", name),
     sprintf("bhi_1km_%s.tif", name)
   ),
